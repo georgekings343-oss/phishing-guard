@@ -60,6 +60,7 @@ app.get("/api/health", (req, res) => {
 
 // ===== Root =====
 app.get("/", (req, res) => res.send("🚀 Phishing Guard Backend API (dev) is running!"));
+res.send("✅ Phishing Guard API is running");
 
 // ===== Start server =====
 const PORT = Number(process.env.PORT || 5000);
