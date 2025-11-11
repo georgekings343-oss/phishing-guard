@@ -36,8 +36,8 @@ app.get('*', (req, res) => {
 });
 
 // ✅ Start server
-app.listen(PORT, () => {
-  console.log(`✅ Backend running: http://localhost:${PORT}`);
+app.listen(5001, "0.0.0.0", () => {
+ console.log(`✅ Backend running on port 5001`);
   console.log(`✅ Frontend served from /dist`);
 });
 
