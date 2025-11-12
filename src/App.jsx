@@ -1,40 +1,24 @@
-// src/App.jsx
+// In your main App.jsx or similar file
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/login/index.jsx';
-import Dashboard from './components/dashboard.jsx';
-import UrlChecker from './components/UrlChecker.jsx';
-
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  return isAuthenticated ? children : <Navigate to="/login" />;
-};
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/login';
+import EmployeeDashboard from './pages/employee-dashboard';
+import SystemAdminDashboard from './pages/SystemAdminDashboard';
+import EmailAnalyzer from './pages/email-analyzer';
+import UrlChecker from './pages/url-checker';
+// ... other imports
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/check-url"
-            element={
-              <ProtectedRoute>
-                <UrlChecker />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+        <Route path="/system-admin-dashboard" element={<SystemAdminDashboard />} />
+        <Route path="/email-analyzer" element={<EmailAnalyzer />} />
+        <Route path="/url-checker" element={<UrlChecker />} />
+        {/* Add other routes as needed */}
+      </Routes>
     </Router>
   );
 }

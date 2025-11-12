@@ -1,37 +1,43 @@
+// Add these API endpoints to your server/server.js
 import express from 'express';
-import fetch from 'node-fetch';
 import cors from 'cors';
 
 const app = express();
-const PORT = 5001;
+app.use(cors());
+app.use(express.json());
 
-// Allow frontend to call backend (Vite dev server)
-app.use(cors({ origin: 'https://ominous-happiness-gxx9j994g7qh9979-5173.app.github.dev' }));
-
-// Proxy pf-signin requests
-app.get('/proxy-pf-signin', async (req, res) => {
-  try {
-    const url = `https://github.dev/pf-signin${req.url.split('?')[1] ? '?' + req.url.split('?')[1] : ''}`;
-    const response = await fetch(url, { redirect: 'follow' });
-    const text = await response.text();
-    res.send(text);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
+// Email analysis endpoint
+app.post('/api/analyze-email', (req, res) => {
+  const { emailContent } = req.body;
+  
+  // Add your actual email analysis logic here
+  const analysisResult = {
+    isPhishing: false, // Replace with actual detection
+    confidence: 85.5,
+    threats: [],
+    recommendations: []
+  };
+  
+  res.json(analysisResult);
 });
 
-// Proxy manifest.json requests
-app.get('/proxy-manifest', async (req, res) => {
-  try {
-    const url = 'https://ominous-happiness-gxx9j994g7qh9979-5173.app.github.dev/manifest.json';
-    const response = await fetch(url);
-    const json = await response.json();
-    res.json(json);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
+// URL checking endpoint  
+app.post('/api/check-url', (req, res) => {
+  const { url } = req.body;
+  
+  // Add your actual URL checking logic here
+  const checkResult = {
+    isMalicious: false, // Replace with actual detection
+    riskScore: 23.4,
+    domainAge: 365,
+    sslValid: true,
+    reputation: 'Good'
+  };
+  
+  res.json(checkResult);
 });
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
