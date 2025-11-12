@@ -53,7 +53,7 @@ const ThreatAnalysisProgress = ({
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentStep(prev => {
-        if (prev < analysisSteps?.length - 1) {
+        if (prev < analysisSteps.length - 1) {
           setEstimatedTime(prevTime => Math.max(0, prevTime - 1));
           return prev + 1;
         } else {
@@ -71,7 +71,7 @@ const ThreatAnalysisProgress = ({
   const generateAnalysisResults = () => {
     // Mock analysis results based on submission data
     const mockResults = {
-      incidentId: `INC-${Date.now()?.toString()?.slice(-6)}`,
+      incidentId: `INC-${Date.now().toString().slice(-6)}`, // removed optional chaining for compatibility
       threatLevel: Math.random() > 0.7 ? 'high' : Math.random() > 0.4 ? 'medium' : 'low',
       confidence: Math.floor(Math.random() * 30) + 70, // 70-99%
       findings: [
@@ -96,14 +96,14 @@ const ThreatAnalysisProgress = ({
     };
 
     // Generate recommendations based on threat level
-    if (mockResults?.threatLevel === 'high') {
+    if (mockResults.threatLevel === 'high') {
       mockResults.recommendations = [
         'Do not click any links or download attachments',
         'Change your password immediately if you interacted with this email',
         'Report to your IT security team',
         'Monitor your accounts for suspicious activity'
       ];
-    } else if (mockResults?.threatLevel === 'medium') {
+    } else if (mockResults.threatLevel === 'medium') {
       mockResults.recommendations = [
         'Exercise caution with this email',
         'Verify sender through alternative communication',
@@ -118,6 +118,7 @@ const ThreatAnalysisProgress = ({
     }
 
     setAnalysisResults(mockResults);
+
     setTimeout(() => {
       if (onComplete) {
         onComplete(mockResults);
@@ -164,16 +165,18 @@ const ThreatAnalysisProgress = ({
           Our security systems are analyzing the reported email for potential threats
         </p>
       </div>
+
       {/* Progress Steps */}
       <div className="space-y-4 mb-8">
-        {analysisSteps?.map((step, index) => (
+        {analysisSteps.map((step, index) => (
           <div
-            key={step?.id}
+            key={step.id}
             className={`flex items-center space-x-4 p-4 rounded-lg border transition-micro ${
               index < currentStep
                 ? 'border-success bg-success/5'
                 : index === currentStep
-                ? 'border-primary bg-primary/5' :'border-border bg-muted/30'
+                ? 'border-primary bg-primary/5'
+                : 'border-border bg-muted/30'
             }`}
           >
             <div className={`p-2 rounded-full ${
@@ -186,17 +189,13 @@ const ThreatAnalysisProgress = ({
               {index < currentStep ? (
                 <Icon name="Check" size={20} />
               ) : (
-                <Icon name={step?.icon} size={20} />
+                <Icon name={step.icon} size={20} />
               )}
             </div>
 
             <div className="flex-1">
-              <h4 className="font-medium text-text-primary">
-                {step?.title}
-              </h4>
-              <p className="text-sm text-muted-foreground">
-                {step?.description}
-              </p>
+              <h4 className="font-medium text-text-primary">{step.title}</h4>
+              <p className="text-sm text-muted-foreground">{step.description}</p>
             </div>
 
             {index === currentStep && (
@@ -212,6 +211,7 @@ const ThreatAnalysisProgress = ({
           </div>
         ))}
       </div>
+
       {/* Estimated Time */}
       {!analysisResults && (
         <div className="text-center mb-8">
@@ -223,6 +223,7 @@ const ThreatAnalysisProgress = ({
           </div>
         </div>
       )}
+
       {/* Analysis Results */}
       {analysisResults && (
         <div className="space-y-6">
@@ -234,7 +235,7 @@ const ThreatAnalysisProgress = ({
               Analysis Complete
             </h3>
             <p className="text-muted-foreground">
-              Incident ID: <span className="font-mono font-medium">{analysisResults?.incidentId}</span>
+              Incident ID: <span className="font-mono font-medium">{analysisResults.incidentId}</span>
             </p>
           </div>
 
@@ -244,36 +245,37 @@ const ThreatAnalysisProgress = ({
               <h4 className="font-semibold text-text-primary">Threat Assessment</h4>
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-muted-foreground">Confidence:</span>
-                <span className="font-medium text-text-primary">{analysisResults?.confidence}%</span>
+                <span className="font-medium text-text-primary">{analysisResults.confidence}%</span>
               </div>
             </div>
 
             <div className="flex items-center space-x-3 mb-4">
               <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                analysisResults?.threatLevel === 'high' ?'bg-error/10 text-error'
-                  : analysisResults?.threatLevel === 'medium' ?'bg-warning/10 text-warning' :'bg-success/10 text-success'
+                analysisResults.threatLevel === 'high' ? 'bg-error/10 text-error'
+                  : analysisResults.threatLevel === 'medium' ? 'bg-warning/10 text-warning'
+                  : 'bg-success/10 text-success'
               }`}>
-                {analysisResults?.threatLevel?.toUpperCase()} RISK
+                {analysisResults.threatLevel.toUpperCase()} RISK
               </div>
               <span className="text-sm text-muted-foreground">
-                Expected response time: {analysisResults?.estimatedResponseTime}
+                Expected response time: {analysisResults.estimatedResponseTime}
               </span>
             </div>
 
             {/* Findings */}
             <div className="space-y-3 mb-6">
               <h5 className="font-medium text-text-primary">Analysis Findings:</h5>
-              {analysisResults?.findings?.map((finding, index) => (
+              {analysisResults.findings.map((finding, index) => (
                 <div key={index} className="flex items-center justify-between py-2 border-b border-border last:border-b-0">
-                  <span className="text-sm text-text-primary">{finding?.category}</span>
+                  <span className="text-sm text-text-primary">{finding.category}</span>
                   <div className="flex items-center space-x-2">
-                    <span className={`text-sm font-medium ${getStatusColor(finding?.status)}`}>
-                      {finding?.status?.toUpperCase()}
+                    <span className={`text-sm font-medium ${getStatusColor(finding.status)}`}>
+                      {finding.status.toUpperCase()}
                     </span>
                     <Icon 
-                      name={finding?.status === 'clean' ? 'CheckCircle' : 'AlertCircle'} 
+                      name={finding.status === 'clean' ? 'CheckCircle' : 'AlertCircle'} 
                       size={16} 
-                      className={getStatusColor(finding?.status)}
+                      className={getStatusColor(finding.status)}
                     />
                   </div>
                 </div>
@@ -284,7 +286,7 @@ const ThreatAnalysisProgress = ({
             <div>
               <h5 className="font-medium text-text-primary mb-3">Recommended Actions:</h5>
               <ul className="space-y-2">
-                {analysisResults?.recommendations?.map((recommendation, index) => (
+                {analysisResults.recommendations.map((recommendation, index) => (
                   <li key={index} className="flex items-start space-x-2">
                     <Icon name="ArrowRight" size={16} className="text-accent mt-0.5 flex-shrink-0" />
                     <span className="text-sm text-text-primary">{recommendation}</span>
