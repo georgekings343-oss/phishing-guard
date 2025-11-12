@@ -1,0 +1,8 @@
+{
+  "name": "Phishing Guard",
+  "short_name": "PhishGuard",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "Phishing detection app"
+}

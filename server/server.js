@@ -1,43 +1,37 @@
 import express from 'express';
+import fetch from 'node-fetch';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = 5001;
 
-app.use(cors());
-app.use(express.json());
+// Allow frontend to call backend (Vite dev server)
+app.use(cors({ origin: 'https://ominous-happiness-gxx9j994g7qh9979-5173.app.github.dev' }));
 
-// ✅ Serve frontend from /dist
-const distPath = path.join(__dirname, '../dist');
-app.use(express.static(distPath));
-
-// ✅ API route
-app.get('/api/test', (req, res) => {
-  res.json({
-    status: "OK",
-    message: "Backend API working!",
-    time: new Date().toISOString()
-  });
+// Proxy pf-signin requests
+app.get('/proxy-pf-signin', async (req, res) => {
+  try {
+    const url = `https://github.dev/pf-signin${req.url.split('?')[1] ? '?' + req.url.split('?')[1] : ''}`;
+    const response = await fetch(url, { redirect: 'follow' });
+    const text = await response.text();
+    res.send(text);
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 });
 
-// ✅ Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: "UP", uptime: process.uptime() });
+// Proxy manifest.json requests
+app.get('/proxy-manifest', async (req, res) => {
+  try {
+    const url = 'https://ominous-happiness-gxx9j994g7qh9979-5173.app.github.dev/manifest.json';
+    const response = await fetch(url);
+    const json = await response.json();
+    res.json(json);
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 });
 
-// ✅ Catch-all route for frontend
-app.get('*', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
 });
-
-// ✅ Start server
-app.listen(5001, "0.0.0.0", () => {
- console.log(`✅ Backend running on port 5001`);
-  console.log(`✅ Frontend served from /dist`);
-});
-
