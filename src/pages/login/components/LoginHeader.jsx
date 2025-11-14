@@ -5,10 +5,10 @@ const LoginHeader = () => {
   return (
     <div className="text-center space-y-4 mb-8">
       <div className="flex items-center justify-center space-x-3">
-        <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-xl">
+        <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-xl glow-border">
           <Icon name="Shield" size={28} color="white" />
         </div>
-        <h1 className="text-2xl font-bold text-primary">
+        <h1 className="text-2xl font-bold text-text-primary">
           PhishGuard Pro
         </h1>
       </div>

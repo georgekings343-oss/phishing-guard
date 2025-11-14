@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import LoginHeader from './components/LoginHeader';
 import LoginForm from './components/LoginForm';
 import MFAForm from './components/MFAForm';
@@ -91,7 +91,11 @@ const Login = () => {
       localStorage.setItem('loginTime', new Date()?.toISOString());
 
       // Navigate to appropriate dashboard
-      navigate(user?.dashboard);
+      if (user?.role === 'admin') {
+        navigate("/system-admin-dashboard");
+      } else {
+        navigate("/employee-dashboard");
+      }
     } catch (err) {
       setError('An error occurred during verification. Please try again.');
       setLoading(false);
@@ -105,45 +109,61 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-surface rounded-2xl shadow-elevation-2 p-8 border border-border">
-          <LoginHeader />
+    <div className="min-h-screen bg-security-gradient text-foreground">
+      <div className="flex items-center justify-center p-4 min-h-screen">
+        <div className="w-full max-w-md">
+          <div className="security-card rounded-2xl shadow-elevation-2 p-8 border border-border">
+            <LoginHeader />
+            
+            {currentStep === 'login' ? (
+              <>
+                <LoginForm
+                  onSubmit={handleLogin}
+                  loading={loading}
+                  error={error}
+                />
+                {/* Add signup link */}
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-muted-foreground">
+                    Don't have an account?{' '}
+                    <Link 
+                      to="/signup" 
+                      className="font-medium text-accent hover:text-accent/90 transition-colors"
+                    >
+                      Sign up here
+                    </Link>
+                  </p>
+                </div>
+              </>
+            ) : (
+              <MFAForm
+                onSubmit={handleMFAVerification}
+                onResendCode={handleResendCode}
+                loading={loading}
+                error={error}
+                email={userEmail}
+              />
+            )}
+            
+            <SecurityBadges />
+          </div>
           
-          {currentStep === 'login' ? (
-            <LoginForm
-              onSubmit={handleLogin}
-              loading={loading}
-              error={error}
-            />
-          ) : (
-            <MFAForm
-              onSubmit={handleMFAVerification}
-              onResendCode={handleResendCode}
-              loading={loading}
-              error={error}
-              email={userEmail}
-            />
-          )}
-          
-          <SecurityBadges />
-        </div>
-        
-        {/* Demo Credentials Info */}
-        <div className="mt-6 p-4 bg-surface/80 backdrop-blur-sm rounded-lg border border-border">
-          <h3 className="text-sm font-semibold text-text-primary mb-3">Demo Credentials:</h3>
-          <div className="space-y-2 text-xs">
-            <div className="grid grid-cols-1 gap-1">
-              <div className="font-medium text-primary">System Admin:</div>
-              <div className="text-muted-foreground">admin@phishguard.com / Admin123! / MFA: 123456</div>
-            </div>
-            <div className="grid grid-cols-1 gap-1">
-              <div className="font-medium text-accent">Employee:</div>
-              <div className="text-muted-foreground">employee@company.com / Employee123! / MFA: 654321</div>
-            </div>
-            <div className="grid grid-cols-1 gap-1">
-              <div className="font-medium text-success">IT Response:</div>
-              <div className="text-muted-foreground">itresponse@company.com / ITResponse123! / MFA: 789012</div>
+          {/* Demo Credentials Info */}
+          <div className="mt-6 p-4 security-card backdrop-blur-sm rounded-lg border border-border">
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Demo Credentials:</h3>
+            <div className="space-y-2 text-xs">
+              <div className="grid grid-cols-1 gap-1">
+                <div className="font-medium text-primary">System Admin:</div>
+                <div className="text-muted-foreground">admin@phishguard.com / Admin123! / MFA: 123456</div>
+              </div>
+              <div className="grid grid-cols-1 gap-1">
+                <div className="font-medium text-accent">Employee:</div>
+                <div className="text-muted-foreground">employee@company.com / Employee123! / MFA: 654321</div>
+              </div>
+              <div className="grid grid-cols-1 gap-1">
+                <div className="font-medium text-success">IT Response:</div>
+                <div className="text-muted-foreground">itresponse@company.com / ITResponse123! / MFA: 789012</div>
+              </div>
             </div>
           </div>
         </div>

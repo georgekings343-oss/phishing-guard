@@ -18,54 +18,24 @@ export default {
     },
     extend: {
       colors: {
-        border: "#e2e8f0", // slate-200
-        input: "#ffffff", // white
-        ring: "#0ea5e9", // sky-500
-        background: "#f9fafb", // gray-50
-        foreground: "#1e293b", // slate-800
-        primary: {
-          DEFAULT: "#1e40af", // blue-800
-          foreground: "#ffffff",
-        },
-        secondary: {
-          DEFAULT: "#64748b", // slate-500
-          foreground: "#ffffff",
-        },
-        destructive: {
-          DEFAULT: "#dc2626", // red-600
-          foreground: "#ffffff",
-        },
-        muted: {
-          DEFAULT: "#f1f5f9", // slate-100
-          foreground: "#64748b", // slate-500
-        },
-        accent: {
-          DEFAULT: "#0ea5e9", // sky-500
-          foreground: "#ffffff",
-        },
-        popover: {
-          DEFAULT: "#ffffff", // solid white (no transparency)
-          foreground: "#1e293b", // slate-800
-        },
-        card: {
-          DEFAULT: "#ffffff", // solid white
-          foreground: "#1e293b", // slate-800
-        },
-        success: {
-          DEFAULT: "#059669", // emerald-600
-          foreground: "#ffffff",
-        },
-        warning: {
-          DEFAULT: "#d97706", // amber-600
-          foreground: "#ffffff",
-        },
-        error: {
-          DEFAULT: "#dc2626", // red-600
-          foreground: "#ffffff",
-        },
-        surface: "#ffffff", // white
-        'text-primary': "#1e293b", // slate-800
-        'text-secondary': "#64748b", // slate-500
+        border: "#1e293b",
+        input: "#1e293b",
+        ring: "#3b82f6",
+        background: "#0a0f1e",
+        foreground: "#f8fafc",
+        primary: { DEFAULT: "#3b82f6", foreground: "#ffffff" },
+        secondary: { DEFAULT: "#64748b", foreground: "#ffffff" },
+        destructive: { DEFAULT: "#ef4444", foreground: "#ffffff" },
+        muted: { DEFAULT: "#1e293b", foreground: "#94a3b8" },
+        accent: { DEFAULT: "#3b82f6", foreground: "#ffffff" },
+        popover: { DEFAULT: "#1a1f2e", foreground: "#f8fafc" },
+        card: { DEFAULT: "#1a1f2e", foreground: "#f8fafc" },
+        success: { DEFAULT: "#10b981", foreground: "#ffffff" },
+        warning: { DEFAULT: "#f59e0b", foreground: "#ffffff" },
+        error: { DEFAULT: "#ef4444", foreground: "#ffffff" },
+        surface: "#1a1f2e",
+        'text-primary': "#f8fafc",
+        'text-secondary': "#cbd5e1",
       },
       borderRadius: {
         lg: "0.5rem",
@@ -85,11 +55,25 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        glow: {
+          "0%, 100%": { boxShadow: "0 0 5px #3b82f6, 0 0 10px #3b82f6, 0 0 15px #3b82f6" },
+          "50%": { boxShadow: "0 0 10px #3b82f6, 0 0 20px #3b82f6, 0 0 30px #3b82f6" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        glow: "glow 2s ease-in-out infinite alternate",
       },
+      backgroundImage: {
+        'security-gradient': 'linear-gradient(135deg, #0a0f1e 0%, #1a1f2e 50%, #0f172a 100%)',
+        'blue-gradient': 'linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%)',
+      },
+      backdropBlur: { xs: '2px' },
+      backgroundColor: {
+        'dark-overlay': '#1a1f2e', // changed from semi-transparent
+        'red-overlay': '#dc2626',   // solid red
+      }
     },
   },
   plugins: [],
