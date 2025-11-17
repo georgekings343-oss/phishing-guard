@@ -1,148 +1,185 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { Link } from 'react-router-dom';
+import Icon from '../../../../components/AppIcon';
 
-const QuickActionsPanel = ({ className = "" }) => {
-  const navigate = useNavigate();
-
+const QuickActionsPanel = () => {
   const quickActions = [
     {
-      title: 'Create Training Campaign',
-      description: 'Launch new security awareness training for employees',
-      icon: 'GraduationCap',
-      iconColor: 'var(--color-success)',
-      action: () => navigate('/training-campaigns/create'),
-      variant: 'default',
-      featured: true
+      name: 'Training Modules',
+      description: 'Access security awareness training materials',
+      icon: 'BookOpen',
+      path: '/employee-dashboard', // Points to training section in employee dashboard
+      color: 'blue'
     },
     {
-      title: 'Generate Phishing Exercise',
-      description: 'Create simulated phishing attack for testing',
-      icon: 'Target',
-      iconColor: 'var(--color-warning)',
-      action: () => navigate('/phishing-exercises/create'),
-      variant: 'outline',
-      featured: true
+      name: 'Phishing Reporter', 
+      description: 'Report suspicious emails for analysis',
+      icon: 'AlertTriangle',
+      path: '/suspicious-email-reporter',
+      color: 'orange'
     },
     {
-      title: 'View Full Analytics',
-      description: 'Access comprehensive security reports and metrics',
+      name: 'Security Analytics',
+      description: 'View security metrics and reports',
       icon: 'BarChart3',
-      iconColor: 'var(--color-accent)',
-      action: () => navigate('/reports'),
-      variant: 'outline',
-      featured: true
+      path: '/analytics',
+      color: 'green'
     },
     {
-      title: 'Manage Users',
+      name: 'User Management',
       description: 'Administer user accounts and permissions',
       icon: 'Users',
-      iconColor: 'var(--color-primary)',
-      action: () => navigate('/user-management'),
-      variant: 'ghost',
-      featured: false
+      path: '/user-management',
+      color: 'purple'
     },
     {
-      title: 'System Settings',
-      description: 'Configure security policies and system preferences',
+      name: 'System Settings',
+      description: 'Configure security policies',
       icon: 'Settings',
-      iconColor: 'var(--color-muted-foreground)',
-      action: () => navigate('/settings'),
-      variant: 'ghost',
-      featured: false
+      path: '/settings',
+      color: 'gray'
     },
     {
-      title: 'Threat Intelligence',
-      description: 'Review latest threat information and indicators',
-      icon: 'Eye',
-      iconColor: 'var(--color-error)',
-      action: () => navigate('/threat-intelligence'),
-      variant: 'ghost',
-      featured: false
+      name: 'Threat Intelligence',
+      description: 'Review threat information',
+      icon: 'ShieldAlert',
+      path: '/threat-intel',
+      color: 'red'
+    },
+    {
+      name: 'Email Analyzer',
+      description: 'Check suspicious emails for phishing',
+      icon: 'Mail',
+      path: '/email-analyzer',
+      color: 'blue'
+    },
+    {
+      name: 'URL Checker', 
+      description: 'Verify suspicious links and websites',
+      icon: 'Link',
+      path: '/url-checker',
+      color: 'green'
     }
   ];
 
-  const featuredActions = quickActions?.filter(action => action?.featured);
-  const secondaryActions = quickActions?.filter(action => !action?.featured);
+  const additionalTools = [
+    {
+      name: 'Incident Reports',
+      description: 'View and manage security incidents',
+      icon: 'FileText',
+      path: '/incident-log-details',
+      color: 'orange'
+    },
+    {
+      name: 'Security Dashboard',
+      description: 'Monitor security metrics',
+      icon: 'LayoutDashboard',
+      path: '/system-admin-dashboard',
+      color: 'blue'
+    },
+    {
+      name: 'Employee Portal',
+      description: 'Access employee security dashboard',
+      icon: 'User',
+      path: '/employee-dashboard',
+      color: 'green'
+    },
+    {
+      name: 'Admin Console',
+      description: 'System administration panel',
+      icon: 'Settings',
+      path: '/system-admin-dashboard',
+      color: 'purple'
+    }
+  ];
+
+  const getColorClasses = (color) => {
+    const colorMap = {
+      blue: 'bg-blue-100 text-blue-600',
+      green: 'bg-green-100 text-green-600',
+      orange: 'bg-orange-100 text-orange-600',
+      purple: 'bg-purple-100 text-purple-600',
+      gray: 'bg-gray-100 text-gray-600',
+      red: 'bg-red-100 text-red-600'
+    };
+    return colorMap[color] || 'bg-primary-100 text-primary-600';
+  };
 
   return (
-    <div className={`quick-actions-panel ${className}`}>
-      {/* Featured Actions */}
-      <div className="bg-card border border-border rounded-lg p-6 shadow-elevation-1 mb-6">
-        <h3 className="text-lg font-semibold text-text-primary mb-4 flex items-center space-x-2">
-          <Icon name="Zap" size={20} />
-          <span>Quick Actions</span>
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {featuredActions?.map((action, index) => (
-            <div
-              key={index}
-              className="group p-4 border border-border rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-micro cursor-pointer"
-              onClick={action?.action}
+    <div className="space-y-6">
+      {/* Quick Actions Section */}
+      <div className="bg-card border border-border rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-text-primary">Quick Actions</h2>
+          <Icon name="Zap" size={20} className="text-warning" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {quickActions.map((action) => (
+            <Link 
+              key={action.name} 
+              to={action.path}
+              className="block"
             >
-              <div className="flex items-start space-x-3">
-                <div className="flex items-center justify-center w-10 h-10 bg-muted group-hover:bg-primary/10 rounded-lg transition-micro">
-                  <Icon name={action?.icon} size={20} color={action?.iconColor} />
+              <div className="bg-card border border-border rounded-lg p-4 hover:shadow-md transition-all duration-200 hover:translate-y-[-2px] h-full group">
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-3 ${getColorClasses(action.color)} group-hover:scale-110 transition-transform duration-200`}>
+                  <Icon name={action.icon} size={24} />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-medium text-text-primary group-hover:text-primary transition-micro">
-                    {action?.title}
-                  </h4>
-                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                    {action?.description}
-                  </p>
+                <h3 className="font-semibold text-text-primary text-sm mb-2">{action.name}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{action.description}</p>
+                <div className="mt-3 flex items-center text-xs text-primary font-medium">
+                  <span>Access Tool</span>
+                  <Icon name="ArrowRight" size={12} className="ml-1" />
                 </div>
               </div>
-              
-              <div className="mt-3">
-                <Button
-                  variant={action?.variant}
-                  size="sm"
-                  iconName="ArrowRight"
-                  iconPosition="right"
-                  onClick={(e) => {
-                    e?.stopPropagation();
-                    action?.action();
-                  }}
-                  className="w-full"
-                >
-                  {action?.title?.split(' ')?.[0]}
-                </Button>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
-      {/* Secondary Actions */}
-      <div className="bg-card border border-border rounded-lg p-6 shadow-elevation-1">
-        <h3 className="text-lg font-semibold text-text-primary mb-4 flex items-center space-x-2">
-          <Icon name="Grid3X3" size={20} />
-          <span>Additional Tools</span>
-        </h3>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {secondaryActions?.map((action, index) => (
-            <button
-              key={index}
-              onClick={action?.action}
-              className="flex items-center space-x-3 p-3 text-left border border-border rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-micro group"
+
+      {/* Additional Tools Section */}
+      <div className="bg-card border border-border rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-text-primary">Additional Tools</h2>
+          <Icon name="Tool" size={20} className="text-muted-foreground" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {additionalTools.map((tool) => (
+            <Link 
+              key={tool.name} 
+              to={tool.path}
+              className="block"
             >
-              <div className="flex items-center justify-center w-8 h-8 bg-muted group-hover:bg-primary/10 rounded-lg transition-micro">
-                <Icon name={action?.icon} size={16} color={action?.iconColor} />
+              <div className="bg-muted/30 border border-border rounded-lg p-4 hover:shadow-md transition-all duration-200 hover:translate-y-[-2px] h-full group">
+                <div className="flex items-start space-x-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${getColorClasses(tool.color)} group-hover:scale-110 transition-transform duration-200`}>
+                    <Icon name={tool.icon} size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-text-primary text-sm mb-1">{tool.name}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{tool.description}</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium text-text-primary group-hover:text-primary transition-micro">
-                  {action?.title}
-                </h4>
-                <p className="text-xs text-muted-foreground line-clamp-1">
-                  {action?.description}
-                </p>
-              </div>
-              <Icon name="ChevronRight" size={16} className="text-muted-foreground group-hover:text-primary transition-micro" />
-            </button>
+            </Link>
           ))}
+        </div>
+
+        {/* Threat Intelligence Section */}
+        <div className="mt-4 pt-4 border-t border-border">
+          <Link to="/threat-intel">
+            <div className="flex items-center justify-between p-3 bg-warning/10 border border-warning/20 rounded-lg hover:bg-warning/20 transition-colors duration-200 group">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-warning/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                  <Icon name="ShieldAlert" size={20} className="text-warning" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-text-primary text-sm">Threat Intelligence</h3>
+                  <p className="text-xs text-muted-foreground">Review latest threat information and indicators</p>
+                </div>
+              </div>
+              <Icon name="ArrowRight" size={16} className="text-warning" />
+            </div>
+          </Link>
         </div>
       </div>
     </div>
