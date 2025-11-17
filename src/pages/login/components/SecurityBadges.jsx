@@ -88,7 +88,7 @@ const SecurityBadges = () => {
       {/* Footer */}
       <div className="text-center pt-4 border-t border-border">
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} PhishGuard Pro. All rights reserved.
+          © {new Date().getFullYear()} SMARTMOVE. All rights reserved.
         </p>
       </div>
     </div>

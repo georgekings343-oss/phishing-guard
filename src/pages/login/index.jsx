@@ -14,7 +14,7 @@ const Login = () => {
 
   // Mock credentials for different user roles
   const mockCredentials = {
-    'admin@phishguard.com': { 
+    'admin@smartmove.com': { 
       password: 'Admin123!', 
       role: 'admin', 
       mfaCode: '123456',
@@ -154,7 +154,7 @@ const Login = () => {
             <div className="space-y-2 text-xs">
               <div className="grid grid-cols-1 gap-1">
                 <div className="font-medium text-primary">System Admin:</div>
-                <div className="text-muted-foreground">admin@phishguard.com / Admin123! / MFA: 123456</div>
+                <div className="text-muted-foreground">admin@smartmove.com / Admin123! / MFA: 123456</div>
               </div>
               <div className="grid grid-cols-1 gap-1">
                 <div className="font-medium text-accent">Employee:</div>

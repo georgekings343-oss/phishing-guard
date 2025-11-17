@@ -6,10 +6,10 @@ const LoginHeader = () => {
     <div className="text-center space-y-4 mb-8">
       <div className="flex items-center justify-center space-x-3">
         <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-xl glow-border">
-          <Icon name="Shield" size={28} color="white" />
+          <Icon name="ShieldCheck" size={28} color="white" />
         </div>
         <h1 className="text-2xl font-bold text-text-primary">
-          PhishGuard Pro
+          SMARTMOVE
         </h1>
       </div>
       
@@ -31,6 +31,11 @@ const LoginHeader = () => {
         <div className="flex items-center space-x-1">
           <Icon name="Shield" size={12} />
           <span>Secure Authentication</span>
+        </div>
+        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+        <div className="flex items-center space-x-1">
+          <Icon name="Lock" size={12} />
+          <span>Enterprise Security</span>
         </div>
       </div>
     </div>

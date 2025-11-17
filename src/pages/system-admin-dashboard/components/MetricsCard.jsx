@@ -23,11 +23,17 @@ const MetricsCard = ({
     return 'Minus';
   };
 
+  const getIconBackgroundColor = () => {
+    if (changeType === 'positive') return 'bg-success/10';
+    if (changeType === 'negative') return 'bg-error/10';
+    return 'bg-primary/10';
+  };
+
   if (loading) {
     return (
       <div className="bg-card border border-border rounded-lg p-6 animate-pulse">
         <div className="flex items-center justify-between mb-4">
-          <div className="w-8 h-8 bg-muted rounded-lg"></div>
+          <div className="w-12 h-12 bg-muted rounded-full"></div>
           <div className="w-6 h-6 bg-muted rounded"></div>
         </div>
         <div className="space-y-2">
@@ -40,9 +46,9 @@ const MetricsCard = ({
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6 shadow-elevation-1 transition-hover hover:shadow-elevation-2">
+    <div className="bg-card border border-border rounded-lg p-6 shadow-elevation-1 transition-all duration-200 hover:shadow-elevation-2 hover:translate-y-[-2px]">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg">
+        <div className={`flex items-center justify-center w-12 h-12 rounded-full ${getIconBackgroundColor()}`}>
           <Icon name={icon} size={24} color={iconColor} />
         </div>
         {trend && (

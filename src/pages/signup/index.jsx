@@ -113,7 +113,7 @@ const Signup = () => {
                 <span className="text-white font-bold text-xl">🛡️</span>
               </div>
               <h2 className="text-2xl font-bold text-text-primary">Create Account</h2>
-              <p className="text-muted-foreground">Join PhishGuard Pro today</p>
+              <p className="text-muted-foreground">Join SMARTMOVE today</p>
             </div>
             
             <form className="space-y-6" onSubmit={handleSubmit}>

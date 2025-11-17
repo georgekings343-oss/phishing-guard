@@ -14,14 +14,14 @@ const SystemAdminDashboard = () => {
   const [notifications, setNotifications] = useState([]);
   const [securityAlerts, setSecurityAlerts] = useState([]);
 
-  // Mock data for metrics
+  // Updated metrics data with more appropriate icons
   const metricsData = [
     {
       title: "Active Phishing Incidents",
       value: "12",
       change: "+3",
       changeType: "negative",
-      icon: "Shield",
+      icon: "AlertTriangle",
       iconColor: "var(--color-error)",
       trend: true
     },
@@ -39,7 +39,7 @@ const SystemAdminDashboard = () => {
       value: "23",
       change: "-2",
       changeType: "positive",
-      icon: "AlertTriangle",
+      icon: "UserX",
       iconColor: "var(--color-warning)",
       trend: true
     },
@@ -48,7 +48,7 @@ const SystemAdminDashboard = () => {
       value: "156",
       change: "+12",
       changeType: "negative",
-      icon: "Eye",
+      icon: "Shield",
       iconColor: "var(--color-accent)",
       trend: true
     }

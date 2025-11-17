@@ -34,7 +34,7 @@ const SecurityAlertBanner = ({
     switch (severity) {
       case 'critical':
         return {
-          container: 'bg-error/10 border-error text-error-foreground',
+          container: 'bg-error border-error text-error-foreground',
           icon: 'AlertCircle',
           iconColor: 'var(--color-error)',
           pulse: true

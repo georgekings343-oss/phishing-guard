@@ -20,7 +20,7 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
     {
       label: 'Incident Management',
       path: '/incident-log-details',
-      icon: 'Shield',
+      icon: 'ShieldAlert',
       roles: ['admin', 'it-response'],
       primary: true
     },
@@ -30,10 +30,36 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
       icon: 'AlertTriangle',
       roles: ['employee', 'admin', 'it-response'],
       primary: true
+    },
+    {
+      label: 'Email Analyzer',
+      path: '/email-analyzer',
+      icon: 'Mail',
+      roles: ['admin', 'employee', 'it-response'],
+      primary: true
+    },
+    {
+      label: 'URL Checker',
+      path: '/url-checker',
+      icon: 'Link',
+      roles: ['admin', 'employee', 'it-response'],
+      primary: true
     }
   ];
 
   const secondaryItems = [
+    {
+      label: 'Training Modules',
+      path: '/training',
+      icon: 'GraduationCap',
+      roles: ['admin', 'employee', 'it-response']
+    },
+    {
+      label: 'Analytics',
+      path: '/analytics',
+      icon: 'BarChart3',
+      roles: ['admin', 'it-response']
+    },
     {
       label: 'Settings',
       path: '/settings',
@@ -41,7 +67,7 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
       roles: ['admin', 'employee', 'it-response']
     },
     {
-      label: 'Help',
+      label: 'Help Center',
       path: '/help',
       icon: 'HelpCircle',
       roles: ['admin', 'employee', 'it-response']
@@ -69,6 +95,11 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
   };
 
   const handleLogout = () => {
+    // Clear authentication data
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('loginTime');
     navigate('/login');
   };
 
@@ -104,10 +135,10 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
             className="flex items-center space-x-3 transition-hover hover:opacity-80"
           >
             <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg">
-              <Icon name="Shield" size={20} color="white" />
+              <Icon name="ShieldCheck" size={20} color="white" />
             </div>
             <span className="text-xl font-semibold text-primary font-sans">
-              PhishGuard Pro
+              SMARTMOVE
             </span>
           </button>
         </div>
@@ -146,7 +177,7 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
               </button>
 
               {isMoreMenuOpen && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-md shadow-elevation-2 py-1">
+                <div className="absolute right-0 top-full mt-1 w-56 bg-popover border border-border rounded-md shadow-elevation-2 py-2 z-1100">
                   {filteredSecondaryItems?.map((item) => (
                     <button
                       key={item?.path}
@@ -171,6 +202,7 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
             iconName="Bell"
             iconPosition="left"
             className="relative"
+            onClick={() => handleNavigation('/incident-log-details')}
           >
             Alerts
             {alertCount > 0 && (
@@ -179,6 +211,11 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
               </span>
             )}
           </Button>
+          
+          <div className="flex items-center space-x-2 px-3 py-1 rounded-md bg-muted text-text-primary">
+            <Icon name="User" size={16} />
+            <span className="text-sm font-medium capitalize">{userRole}</span>
+          </div>
           
           <Button
             variant="ghost"
@@ -199,6 +236,7 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
           <Icon name={isMenuOpen ? "X" : "Menu"} size={24} />
         </button>
       </div>
+      
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="lg:hidden bg-surface border-t border-border">
@@ -240,6 +278,12 @@ const Header = ({ userRole = 'employee', alertCount = 0, onMenuToggle }) => {
             )}
 
             <div className="border-t border-border my-2"></div>
+            
+            {/* User Info */}
+            <div className="flex items-center space-x-3 px-4 py-3">
+              <Icon name="User" size={18} className="text-muted-foreground" />
+              <span className="text-sm font-medium text-text-primary capitalize">{userRole} Account</span>
+            </div>
             
             <button
               onClick={handleLogout}

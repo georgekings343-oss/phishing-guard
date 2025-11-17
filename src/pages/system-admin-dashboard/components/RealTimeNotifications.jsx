@@ -18,32 +18,33 @@ const RealTimeNotifications = ({ notifications = [], onDismiss, className = "" }
     }
   };
 
+  // ❗ Updated: all opacity removed
   const getNotificationStyles = (type) => {
     switch (type) {
       case 'critical':
         return {
-          container: 'bg-error/10 border-error text-error-foreground',
+          container: 'bg-error border-error text-error-foreground',
           icon: 'AlertCircle',
           iconColor: 'var(--color-error)',
           pulse: true
         };
       case 'warning':
         return {
-          container: 'bg-warning/10 border-warning text-warning-foreground',
+          container: 'bg-warning border-warning text-warning-foreground',
           icon: 'AlertTriangle',
           iconColor: 'var(--color-warning)',
           pulse: true
         };
       case 'info':
         return {
-          container: 'bg-accent/10 border-accent text-accent-foreground',
+          container: 'bg-accent border-accent text-accent-foreground',
           icon: 'Info',
           iconColor: 'var(--color-accent)',
           pulse: false
         };
       case 'success':
         return {
-          container: 'bg-success/10 border-success text-success-foreground',
+          container: 'bg-success border-success text-success-foreground',
           icon: 'CheckCircle',
           iconColor: 'var(--color-success)',
           pulse: false
@@ -99,16 +100,16 @@ const RealTimeNotifications = ({ notifications = [], onDismiss, className = "" }
                     <h4 className="text-sm font-medium">
                       {notification?.title}
                     </h4>
-                    <span className="px-2 py-0.5 text-xs font-medium bg-surface/20 rounded-full">
+                    <span className="px-2 py-0.5 text-xs font-medium bg-surface rounded-full">
                       {notification?.type?.toUpperCase()}
                     </span>
                   </div>
                   
-                  <p className="text-sm opacity-90 mb-2">
+                  <p className="text-sm mb-2">
                     {notification?.message}
                   </p>
                   
-                  <p className="text-xs opacity-70">
+                  <p className="text-xs">
                     {formatTimestamp(notification?.timestamp)}
                   </p>
                 </div>
@@ -116,14 +117,14 @@ const RealTimeNotifications = ({ notifications = [], onDismiss, className = "" }
 
               <button
                 onClick={() => handleDismiss(notification?.id)}
-                className="p-1 rounded-md hover:bg-surface/20 transition-hover ml-2"
+                className="p-1 rounded-md hover:bg-surface transition-hover ml-2"
                 title="Dismiss notification"
               >
                 <Icon name="X" size={16} />
               </button>
             </div>
             {notification?.action && (
-              <div className="mt-3 pt-3 border-t border-surface/20">
+              <div className="mt-3 pt-3 border-t border-surface">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -137,6 +138,7 @@ const RealTimeNotifications = ({ notifications = [], onDismiss, className = "" }
           </div>
         );
       })}
+
       {visibleNotifications?.length > 5 && (
         <div className="p-3 bg-muted border border-border rounded-lg shadow-elevation-2">
           <div className="flex items-center justify-between">
