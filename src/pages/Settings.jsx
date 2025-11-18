@@ -1,29 +1,89 @@
-import React from 'react';
-import Header from '../components/ui/Header';
-import BreadcrumbTrail from '../components/ui/BreadcrumbTrail';
+import React, { useState, useContext } from "react";
+import { PopupContext } from "../contexts/PopupContext";
 
 const Settings = () => {
-  return (
-    <div className="min-h-screen bg-background">
-      <Header userRole="employee" alertCount={0} onMenuToggle={() => {}} />
-      <main className="pt-16 pb-8">
-        <div className="max-w-4xl mx-auto px-4 lg:px-6">
-          <BreadcrumbTrail />
-          <div className="bg-card border border-border rounded-lg p-6">
-            <h1 className="text-2xl font-bold text-text-primary mb-6">Settings</h1>
-            <div className="space-y-6">
-              <div className="bg-muted/30 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold text-text-primary mb-2">Account Settings</h2>
-                <p className="text-muted-foreground">Manage your account preferences and security settings.</p>
-              </div>
-              <div className="bg-muted/30 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold text-text-primary mb-2">Notification Preferences</h2>
-                <p className="text-muted-foreground">Configure how you receive security alerts and updates.</p>
-              </div>
-            </div>
-          </div>
+  const [activeSection, setActiveSection] = useState(null);
+  const { popupsEnabled, togglePopups } = useContext(PopupContext);
+
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
+  const sections = [
+    {
+      id: "ui",
+      title: "User Interface & Interaction",
+      content: (
+        <div className="flex items-center gap-4">
+          <span>Enable Popups:</span>
+          <button
+            onClick={togglePopups}
+            className={`px-3 py-1 rounded-md ${
+              popupsEnabled ? "bg-green-500" : "bg-gray-500"
+            }`}
+          >
+            {popupsEnabled ? "ON" : "OFF"}
+          </button>
         </div>
-      </main>
+      ),
+    },
+    {
+      id: "theme",
+      title: "Theme Settings",
+      content: (
+        <div className="flex items-center gap-4">
+          <span>Current Theme: {theme}</span>
+          <button onClick={toggleTheme} className="px-3 py-1 rounded-md bg-gray-600">
+            Switch Theme
+          </button>
+        </div>
+      ),
+    },
+    {
+      id: "notifications",
+      title: "Notifications",
+      content: <p>Configure notification sounds, email alerts, and reminders.</p>,
+    },
+    {
+      id: "account",
+      title: "Account Settings",
+      content: <p>Update password, profile info, and auth preferences.</p>,
+    },
+    {
+      id: "privacy",
+      title: "Privacy & Security",
+      content: <p>Manage data privacy, logs, and security policies.</p>,
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background text-foreground p-8">
+      <h1 className="text-3xl font-bold mb-6">Settings</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Sidebar */}
+        <div className="border rounded-xl p-4 space-y-2">
+          {sections.map((s) => (
+            <button
+              key={s.id}
+              className={`w-full text-left p-2 rounded-md ${
+                activeSection === s.id ? "bg-gray-700" : ""
+              }`}
+              onClick={() => setActiveSection(activeSection === s.id ? null : s.id)}
+            >
+              {s.title}
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="md:col-span-2 border rounded-xl p-4">
+          {activeSection ? (
+            sections.find((s) => s.id === activeSection).content
+          ) : (
+            <p className="opacity-50">Select a section to edit settings</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

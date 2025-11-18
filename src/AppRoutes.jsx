@@ -1,32 +1,27 @@
+// src/AppRoutes.jsx
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Auth pages
+// Pages
 import Login from "./pages/login";
-
-// Dashboards
+import Signup from "./pages/signup";
 import EmployeeDashboard from "./pages/employee-dashboard";
 import SystemAdminDashboard from "./pages/system-admin-dashboard";
-
-// Tools
 import EmailAnalyzer from "./pages/email-analyzer";
 import UrlChecker from "./pages/url-checker";
 import SuspiciousEmailReporter from "./pages/suspicious-email-reporter";
 import IncidentLogDetails from "./pages/incident-log-details";
-
-// Generic pages
+import Settings from "./pages/Settings";
+import Analytics from "./pages/Analytics";
+import AdminPanel from "./pages/AdminPanel";
+import UserManagement from "./pages/UserManagement";
+import ThreatIntelligence from "./pages/ThreatIntelligence";
 import NotFound from "./pages/NotFound";
 
-// Extra pages that were inline
-const Settings = () => <div className="p-8"><h1>Settings</h1></div>;
-const Analytics = () => <div className="p-8"><h1>Analytics</h1></div>;
-const UserManagement = () => <div className="p-8"><h1>User Management</h1></div>;
-const ThreatIntelligence = () => <div className="p-8"><h1>Threat Intelligence</h1></div>;
-
-// Authentication wrapper
+// Protected route wrapper
 const ProtectedRoute = ({ children }) => {
-  const loggedIn = localStorage.getItem("isAuthenticated") === "true";
-  return loggedIn ? children : <Navigate to="/login" replace />;
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 export default function AppRoutes() {
@@ -34,6 +29,7 @@ export default function AppRoutes() {
     <Routes>
       {/* Public */}
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
 
       {/* Protected */}
       <Route path="/employee-dashboard" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
@@ -44,11 +40,13 @@ export default function AppRoutes() {
       <Route path="/incident-log-details" element={<ProtectedRoute><IncidentLogDetails /></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+      <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
       <Route path="/user-management" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
       <Route path="/threat-intel" element={<ProtectedRoute><ThreatIntelligence /></ProtectedRoute>} />
 
-      {/* Redirect root */}
-      <Route path="/" element={<Navigate to="/login" />} />
+      {/* Redirects */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/dashboard" element={<Navigate to="/employee-dashboard" replace />} />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />

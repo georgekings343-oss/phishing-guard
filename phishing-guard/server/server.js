@@ -1,4 +1,3 @@
-// File: /workspaces/phishing-guard/server/server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -31,18 +30,29 @@ if (process.env.MONGO_URI) {
   console.warn("⚠️ No MONGO_URI provided — running WITHOUT MongoDB (dev mode).");
 }
 
-// ===== Safe route imports (if files missing, use empty router) =====
+// ===== Safe route imports =====
 let authRoutes, settingsRoutes, dashboardRoutes, incidentsRoutes;
+let trainingModulesRoutes, analyticsRoutes, helpCenterRoutes, usersRoutes;
 
 try { authRoutes = require("./routes/auth"); } catch (e) { authRoutes = express.Router(); }
 try { settingsRoutes = require("./routes/settings"); } catch (e) { settingsRoutes = express.Router(); }
 try { dashboardRoutes = require("./routes/dashboard"); } catch (e) { dashboardRoutes = express.Router(); }
 try { incidentsRoutes = require("./routes/incidents"); } catch (e) { incidentsRoutes = express.Router(); }
 
+try { trainingModulesRoutes = require("./routes/trainingModules"); } catch (e) { trainingModulesRoutes = express.Router(); }
+try { analyticsRoutes = require("./routes/analytics"); } catch (e) { analyticsRoutes = express.Router(); }
+try { helpCenterRoutes = require("./routes/helpCenter"); } catch (e) { helpCenterRoutes = express.Router(); }
+try { usersRoutes = require("./routes/users"); } catch (e) { usersRoutes = express.Router(); }
+
+// ===== Mount routes =====
 app.use("/api/auth", authRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/incidents", incidentsRoutes);
+app.use("/api/training-modules", trainingModulesRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/help-center", helpCenterRoutes);
+app.use("/api/users", usersRoutes);
 
 // ===== Dummy login route (frontend test) =====
 app.post("/api/auth/login", (req, res) => {
@@ -60,7 +70,6 @@ app.get("/api/health", (req, res) => {
 
 // ===== Root =====
 app.get("/", (req, res) => res.send("🚀 Phishing Guard Backend API (dev) is running!"));
-res.send("✅ Phishing Guard API is running");
 
 // ===== Start server =====
 const PORT = Number(process.env.PORT || 5000);

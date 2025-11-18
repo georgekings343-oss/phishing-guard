@@ -1,14 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App.jsx";
+import AppRoutes from "./AppRoutes";
+import "./styles/tailwind.css";
 
-import "./index.css"; 
+import { PopupProvider } from "./contexts/PopupContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <PopupProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </PopupProvider>
   </React.StrictMode>
 );

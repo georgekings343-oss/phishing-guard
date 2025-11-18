@@ -1,3 +1,4 @@
+// src/components/ui/QuickActionToolbar.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
@@ -14,67 +15,42 @@ const QuickActionToolbar = ({
       case 'admin':
         return [
           {
-            label: 'Create Training Campaign',
+            label: 'Training Modules',
             icon: 'GraduationCap',
-            action: () => navigate('/training-campaigns/create'),
+            action: () => navigate('/training-modules'),
             variant: 'default',
-            description: 'Launch new security awareness training'
+            description: 'Access and manage training modules'
           },
           {
-            label: 'Generate Exercise',
-            icon: 'Target',
-            action: () => navigate('/phishing-exercises/create'),
-            variant: 'outline',
-            description: 'Create phishing simulation exercise'
-          },
-          {
-            label: 'View Reports',
+            label: 'Analytics',
             icon: 'BarChart3',
-            action: () => navigate('/reports'),
+            action: () => navigate('/analytics'),
             variant: 'outline',
-            description: 'Access security analytics and reports'
+            description: 'View security reports and analytics'
           },
           {
-            label: 'Manage Users',
+            label: 'Settings',
+            icon: 'Settings',
+            action: () => navigate('/settings'),
+            variant: 'ghost',
+            description: 'Configure system settings'
+          },
+          {
+            label: 'Admin Panel',
             icon: 'Users',
-            action: () => navigate('/user-management'),
-            variant: 'ghost',
-            description: 'Administer user accounts and permissions'
-          }
-        ];
-      
-      case 'it-response':
-        return [
-          {
-            label: 'Investigate Incident',
-            icon: 'Search',
-            action: () => navigate('/incident-log-details'),
+            action: () => navigate('/admin'),
             variant: 'default',
-            description: 'Review and analyze security incidents'
+            description: 'Manage users and permissions'
           },
           {
-            label: 'Report Threat',
-            icon: 'AlertTriangle',
-            action: () => navigate('/suspicious-email-reporter'),
+            label: 'Help Center',
+            icon: 'HelpCircle',
+            action: () => navigate('/help-center'),
             variant: 'outline',
-            description: 'Submit suspicious email or threat'
-          },
-          {
-            label: 'Threat Intelligence',
-            icon: 'Shield',
-            action: () => navigate('/threat-intelligence'),
-            variant: 'outline',
-            description: 'Access latest threat information'
-          },
-          {
-            label: 'Response Playbook',
-            icon: 'BookOpen',
-            action: () => navigate('/response-playbook'),
-            variant: 'ghost',
-            description: 'View incident response procedures'
+            description: 'Access support resources'
           }
         ];
-      
+
       case 'employee':
       default:
         return [
@@ -86,18 +62,18 @@ const QuickActionToolbar = ({
             description: 'Report potentially malicious emails'
           },
           {
-            label: 'Security Training',
+            label: 'Training Modules',
             icon: 'GraduationCap',
-            action: () => navigate('/training'),
+            action: () => navigate('/training-modules'),
             variant: 'outline',
             description: 'Access security awareness training'
           },
           {
-            label: 'Security Tips',
-            icon: 'Lightbulb',
-            action: () => navigate('/security-tips'),
+            label: 'Help Center',
+            icon: 'HelpCircle',
+            action: () => navigate('/help-center'),
             variant: 'ghost',
-            description: 'Learn security best practices'
+            description: 'Learn security best practices and guides'
           }
         ];
     }
@@ -117,25 +93,21 @@ const QuickActionToolbar = ({
     }
   };
 
-  const getButtonSize = () => {
-    return variant === 'grid' ? 'default' : 'sm';
-  };
+  const getButtonSize = () => (variant === 'grid' ? 'default' : 'sm');
 
-  if (actions?.length === 0) {
-    return null;
-  }
+  if (!actions || actions.length === 0) return null;
 
   return (
     <div className={`quick-action-toolbar ${className}`}>
       <div className={getLayoutClasses()}>
-        {actions?.map((action, index) => (
+        {actions.map((action, index) => (
           <div key={index} className={variant === 'grid' ? 'group' : ''}>
             <Button
-              variant={action?.variant}
+              variant={action.variant}
               size={getButtonSize()}
-              iconName={action?.icon}
+              iconName={action.icon}
               iconPosition="left"
-              onClick={action?.action}
+              onClick={action.action}
               className={`
                 transition-micro
                 ${variant === 'grid' ? 'w-full h-auto py-4 flex-col space-y-2' : ''}
@@ -143,18 +115,18 @@ const QuickActionToolbar = ({
               `}
             >
               <span className={variant === 'grid' ? 'text-center' : ''}>
-                {action?.label}
+                {action.label}
               </span>
-              {variant === 'grid' && action?.description && (
+              {variant === 'grid' && action.description && (
                 <span className="text-xs opacity-70 font-normal mt-1 leading-tight">
-                  {action?.description}
+                  {action.description}
                 </span>
               )}
             </Button>
-            
-            {variant !== 'grid' && action?.description && (
+
+            {variant !== 'grid' && action.description && (
               <div className="hidden lg:block absolute z-1200 px-2 py-1 text-xs bg-popover border border-border rounded-md shadow-elevation-2 opacity-0 group-hover:opacity-100 transition-micro pointer-events-none">
-                {action?.description}
+                {action.description}
               </div>
             )}
           </div>
