@@ -65,7 +65,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "frontend": "vite",
-    "backend": "node server/server.js",
+    "backend": "node phishing-guard/server/server.js",
     "start:all": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "proxy": "http://localhost:5000",

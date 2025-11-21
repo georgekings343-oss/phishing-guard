@@ -1,321 +1,131 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+// src/pages/signup/index.jsx
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Input } from "../../components/ui/Input";
+import { Button } from "../../components/ui/Button";
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    role: 'employee'
-  });
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+export default function Signup() {
   const navigate = useNavigate();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Handle input changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
-    }
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-
-    if (!formData.phone) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!/^\d{10,15}$/.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone = 'Phone number is invalid';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    return newErrors;
-  };
-
-  const handleSubmit = async (e) => {
+  // Signup request
+  const handleSignup = async (e) => {
     e.preventDefault();
-    
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
-    }
-
-    setIsLoading(true);
+    setLoading(true);
+    setErrorMsg("");
 
     try {
-      const response = await fetch('http://localhost:5000/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        alert('Account created successfully! Please log in.');
-        navigate('/login');
-      } else {
-        const errorData = await response.json();
-        setErrors({ submit: errorData.message || 'Signup failed. Please try again.' });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(data.message || "Signup failed. Try again.");
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error('Signup error:', error);
-      setErrors({ submit: 'Network error. Please try again.' });
-    } finally {
-      setIsLoading(false);
+
+      // Save login state
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      setErrorMsg("Server error. Try again.");
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-security-gradient text-foreground">
-      <div className="flex items-center justify-center p-4 min-h-screen">
-        <div className="w-full max-w-md">
-          <div className="security-card rounded-2xl shadow-elevation-2 p-8 border border-border">
-            <div className="text-center mb-8">
-              <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center mb-4">
-                <span className="text-white font-bold text-xl">🛡️</span>
-              </div>
-              <h2 className="text-2xl font-bold text-text-primary">Create Account</h2>
-              <p className="text-muted-foreground">Join SMARTMOVE today</p>
-            </div>
-            
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-text-primary mb-2">
-                    First Name *
-                  </label>
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 bg-input border border-border rounded-md text-text-primary placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                    placeholder="John"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                  />
-                  {errors.firstName && (
-                    <p className="mt-1 text-sm text-error">{errors.firstName}</p>
-                  )}
-                </div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          Create Your Account
+        </h1>
 
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-text-primary mb-2">
-                    Last Name *
-                  </label>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 bg-input border border-border rounded-md text-text-primary placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                    placeholder="Doe"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                  />
-                  {errors.lastName && (
-                    <p className="mt-1 text-sm text-error">{errors.lastName}</p>
-                  )}
-                </div>
-              </div>
+        {errorMsg && (
+          <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
+            {errorMsg}
+          </div>
+        )}
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
-                  Email Address *
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-text-primary placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                  placeholder="john.doe@company.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-error">{errors.email}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-text-primary mb-2">
-                  Phone Number *
-                </label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  required
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-text-primary placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                  placeholder="+1 (555) 123-4567"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-sm text-error">{errors.phone}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="role" className="block text-sm font-medium text-text-primary mb-2">
-                  Account Type
-                </label>
-                <select
-                  id="role"
-                  name="role"
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                  value={formData.role}
-                  onChange={handleChange}
-                >
-                  <option value="employee">Employee</option>
-                  <option value="admin">Administrator</option>
-                  <option value="manager">Manager</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-text-primary mb-2">
-                  Password *
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-text-primary placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <p className="mt-1 text-sm text-error">{errors.password}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-primary mb-2">
-                  Confirm Password *
-                </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-text-primary placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-error">{errors.confirmPassword}</p>
-                )}
-              </div>
-
-              {errors.submit && (
-                <div className="p-4 bg-error/10 border border-error rounded-lg text-error text-sm">
-                  {errors.submit}
-                </div>
-              )}
-
-              <div>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-primary text-white py-3 px-4 rounded-lg hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                >
-                  {isLoading ? (
-                    <div className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Creating Account...
-                    </div>
-                  ) : (
-                    'Create Account'
-                  )}
-                </button>
-              </div>
-
-              <div className="text-center pt-4 border-t border-border">
-                <p className="text-sm text-muted-foreground">
-                  Already have an account?{' '}
-                  <Link to="/login" className="text-accent hover:text-accent/90 font-medium transition-colors">
-                    Sign in here
-                  </Link>
-                </p>
-              </div>
-            </form>
+        <form onSubmit={handleSignup} className="space-y-4">
+          {/* Name */}
+          <div>
+            <label className="block mb-1 font-medium">Full Name</label>
+            <Input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Enter your full name"
+              className="w-full border border-gray-300"
+            />
           </div>
 
-          <div className="mt-6 p-4 security-card rounded-lg border border-border">
-            <div className="text-center mb-4">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                Enterprise-Grade Security
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div className="text-text-primary">
-                <div className="text-lg font-bold text-success">99.9%</div>
-                <div className="text-xs text-muted-foreground">Detection Rate</div>
-              </div>
-              <div className="text-text-primary">
-                <div className="text-lg font-bold text-primary">24/7</div>
-                <div className="text-xs text-muted-foreground">Monitoring</div>
-              </div>
-              <div className="text-text-primary">
-                <div className="text-lg font-bold text-accent">256-bit</div>
-                <div className="text-xs text-muted-foreground">Encryption</div>
-              </div>
-              <div className="text-text-primary">
-                <div className="text-lg font-bold text-warning">SOC 2</div>
-                <div className="text-xs text-muted-foreground">Compliant</div>
-              </div>
-            </div>
+          {/* Email */}
+          <div>
+            <label className="block mb-1 font-medium">Email</label>
+            <Input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="example@email.com"
+              className="w-full border border-gray-300"
+            />
           </div>
-        </div>
+
+          {/* Password */}
+          <div>
+            <label className="block mb-1 font-medium">Password</label>
+            <Input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+              className="w-full border border-gray-300"
+            />
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg"
+            disabled={loading}
+          >
+            {loading ? "Creating account..." : "Sign Up"}
+          </Button>
+        </form>
+
+        <p className="text-center mt-4 text-sm">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 font-semibold">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
-};
-
-export default Signup;
+}

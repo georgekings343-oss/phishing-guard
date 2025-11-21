@@ -13,64 +13,78 @@
     --color-border: #E2E8F0; /* slate-200 */
     --color-input: #FFFFFF; /* white */
     --color-ring: #0EA5E9; /* sky-500 */
-    
+
     /* Card Colors */
     --color-card: #FFFFFF; /* white */
     --color-card-foreground: #1E293B; /* slate-800 */
-    
+
     /* Popover Colors */
     --color-popover: #FFFFFF; /* white */
     --color-popover-foreground: #1E293B; /* slate-800 */
-    
+
     /* Muted Colors */
     --color-muted: #F1F5F9; /* slate-100 */
     --color-muted-foreground: #64748B; /* slate-500 */
-    
+
     /* Primary Colors */
     --color-primary: #1E3A8A; /* blue-800 */
     --color-primary-foreground: #FFFFFF; /* white */
-    
+
     /* Secondary Colors */
     --color-secondary: #64748B; /* slate-500 */
     --color-secondary-foreground: #FFFFFF; /* white */
-    
+
     /* Destructive Colors */
     --color-destructive: #DC2626; /* red-600 */
     --color-destructive-foreground: #FFFFFF; /* white */
-    
+
     /* Accent Colors */
     --color-accent: #0EA5E9; /* sky-500 */
     --color-accent-foreground: #FFFFFF; /* white */
-    
+
     /* Success Colors */
     --color-success: #059669; /* emerald-600 */
     --color-success-foreground: #FFFFFF; /* white */
-    
+
     /* Warning Colors */
     --color-warning: #D97706; /* amber-600 */
     --color-warning-foreground: #FFFFFF; /* white */
-    
+
     /* Error Colors */
     --color-error: #DC2626; /* red-600 */
     --color-error-foreground: #FFFFFF; /* white */
-    
+
     /* Surface Color */
     --color-surface: #FFFFFF; /* white */
-    
+
     /* Text Colors */
     --color-text-primary: #1E293B; /* slate-800 */
     --color-text-secondary: #64748B; /* slate-500 */
   }
 
-  /* Apply border color to all elements */
-  * {
-    border-color: var(--color-border); /* Fixed: use CSS variable */
-  }
-  
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: 'Inter', sans-serif; /* Added default font */
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* ------------------------------ */
+/* FIX: Input text invisible bug  */
+/* ------------------------------ */
+@layer base {
+  input,
+  textarea,
+  select {
+    color: var(--color-text-primary) !important;
+    caret-color: var(--color-text-primary) !important;
+  }
+
+  .dark input,
+  .dark textarea,
+  .dark select {
+    color: white !important;
+    caret-color: white !important;
   }
 }
 
@@ -78,19 +92,19 @@
   .animate-pulse-slow {
     animation: pulse 2s ease-in-out infinite;
   }
-  
+
   .transition-micro {
     transition: all 200ms ease-out;
   }
-  
+
   .transition-hover {
     transition: all 150ms ease-in;
   }
-  
+
   .shadow-elevation-1 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
-  
+
   .shadow-elevation-2 {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }

@@ -1,37 +1,23 @@
-const mongoose = require('mongoose');
+// phishing-guard/server/models/User.js
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 6
-  },
-  role: {
-    type: String,
-    enum: ['admin', 'employee', 'viewer'],
-    default: 'employee'
-  }
-}, {
-  timestamps: true
+const UserSchema = new mongoose.Schema({
+  name: { type: String, default: "Client" },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  passwordHash: { type: String, required: true },
+  role: { type: String, enum: ["client","admin"], default: "client" },
+  createdAt: { type: Date, default: Date.now }
 });
 
-// Remove password when converting to JSON
-userSchema.methods.toJSON = function() {
-  const user = this.toObject();
-  delete user.password;
-  return user;
+UserSchema.methods.verifyPassword = function(password) {
+  return bcrypt.compare(password, this.passwordHash);
 };
 
-module.exports = mongoose.model('User', userSchema);
+UserSchema.statics.createHashed = async function(email, password, name, role = "client") {
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  return this.create({ email, passwordHash: hash, name, role });
+};
+
+module.exports = mongoose.model("User", UserSchema);

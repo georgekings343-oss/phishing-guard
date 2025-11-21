@@ -1,3 +1,4 @@
+// src/pages/login/index.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import LoginHeader from './components/LoginHeader';
@@ -5,65 +6,47 @@ import LoginForm from './components/LoginForm';
 import MFAForm from './components/MFAForm';
 import SecurityBadges from './components/SecurityBadges';
 
-const Login = () => {
+export default function Login() {
   const [currentStep, setCurrentStep] = useState('login'); // 'login' | 'mfa'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [mfaId, setMfaId] = useState(null);
+  const [devCode, setDevCode] = useState(null); // for dev display only
   const navigate = useNavigate();
-
-  // Mock credentials for different user roles
-  const mockCredentials = {
-    'admin@smartmove.com': { 
-      password: 'Admin123!', 
-      role: 'admin', 
-      mfaCode: '123456',
-      dashboard: '/system-admin-dashboard'
-    },
-    'employee@company.com': { 
-      password: 'Employee123!', 
-      role: 'employee', 
-      mfaCode: '654321',
-      dashboard: '/employee-dashboard'
-    },
-    'itresponse@company.com': { 
-      password: 'ITResponse123!', 
-      role: 'it-response', 
-      mfaCode: '789012',
-      dashboard: '/employee-dashboard'
-    }
-  };
 
   const handleLogin = async (formData) => {
     setLoading(true);
     setError('');
 
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password: formData.password })
+      });
 
-      const user = mockCredentials?.[formData?.email];
-      
-      if (!user || user?.password !== formData?.password) {
-        setError('Invalid email or password. Please check your credentials and try again.');
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.message || 'Login failed');
         setLoading(false);
         return;
       }
 
-      // Store user email for MFA step
-      setUserEmail(formData?.email);
-      
-      // Store remember me preference
-      if (formData?.rememberMe) {
-        localStorage.setItem('rememberMe', 'true');
-        localStorage.setItem('userEmail', formData?.email);
+      if (data.mfaRequired) {
+        setUserEmail(formData.email);
+        setMfaId(data.mfaId);
+        if (data.devCode) setDevCode(data.devCode); // dev-only
+        setCurrentStep('mfa');
+      } else if (data.token) {
+        // fallback if backend returned token directly
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('isAuthenticated', 'true');
+        navigate('/employee-dashboard');
       }
-
-      // Proceed to MFA
-      setCurrentStep('mfa');
-      setLoading(false);
     } catch (err) {
-      setError('An error occurred during login. Please try again.');
+      setError('Network error, please try again');
+    } finally {
       setLoading(false);
     }
   };
@@ -71,41 +54,50 @@ const Login = () => {
   const handleMFAVerification = async (verificationCode) => {
     setLoading(true);
     setError('');
-
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const res = await fetch('http://localhost:5000/api/auth/verify-mfa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mfaId, code: verificationCode })
+      });
 
-      const user = mockCredentials?.[userEmail];
-      
-      if (user?.mfaCode !== verificationCode) {
-        setError('Invalid verification code. Please check and try again.');
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.message || 'Verification failed');
         setLoading(false);
         return;
       }
 
-      // Store user session
-      localStorage.setItem('userRole', user?.role);
-      localStorage.setItem('userEmail', userEmail);
+      // Save token & user details
+      localStorage.setItem('token', data.token);
       localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('loginTime', new Date()?.toISOString());
+      localStorage.setItem('userEmail', data.user.email);
+      localStorage.setItem('userRole', data.user.role);
 
-      // Navigate to appropriate dashboard
-      if (user?.role === 'admin') {
-        navigate("/system-admin-dashboard");
-      } else {
-        navigate("/employee-dashboard");
-      }
+      // Navigate based on role
+      if (data.user.role === 'admin') navigate('/system-admin-dashboard');
+      else navigate('/employee-dashboard');
     } catch (err) {
-      setError('An error occurred during verification. Please try again.');
+      setError('Network error');
+    } finally {
       setLoading(false);
     }
   };
 
   const handleResendCode = async () => {
-    // Simulate resend code API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    // In real app, this would trigger a new MFA code to be sent
+    // Optionally implement resend route later.
+    // For now we call login again to regenerate an MFA code.
+    if (!userEmail) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, password: '' }) // backend will reject password; better to implement dedicated resend endpoint
+      });
+      // Not implementing resend properly now; we leave UI to inform user to re-login if needed.
+    } catch (err) { /* ignore */ } finally { setLoading(false); }
   };
 
   return (
@@ -114,55 +106,49 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="security-card rounded-2xl shadow-elevation-2 p-8 border border-border">
             <LoginHeader />
-            
+
             {currentStep === 'login' ? (
               <>
-                <LoginForm
-                  onSubmit={handleLogin}
-                  loading={loading}
-                  error={error}
-                />
-                {/* Add signup link */}
+                <LoginForm onSubmit={handleLogin} loading={loading} error={error} />
                 <div className="mt-4 text-center">
                   <p className="text-sm text-muted-foreground">
                     Don't have an account?{' '}
-                    <Link 
-                      to="/signup" 
-                      className="font-medium text-accent hover:text-accent/90 transition-colors"
-                    >
+                    <Link to="/signup" className="font-medium text-accent hover:text-accent/90 transition-colors">
                       Sign up here
                     </Link>
                   </p>
                 </div>
               </>
             ) : (
-              <MFAForm
-                onSubmit={handleMFAVerification}
-                onResendCode={handleResendCode}
-                loading={loading}
-                error={error}
-                email={userEmail}
-              />
+              <>
+                <MFAForm
+                  onSubmit={handleMFAVerification}
+                  onResendCode={handleResendCode}
+                  loading={loading}
+                  error={error}
+                  email={userEmail}
+                />
+                {devCode && (
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    DEV MFA CODE: <span className="font-medium text-accent">{devCode}</span>
+                  </div>
+                )}
+              </>
             )}
-            
+
             <SecurityBadges />
           </div>
-          
-          {/* Demo Credentials Info */}
+
           <div className="mt-6 p-4 security-card backdrop-blur-sm rounded-lg border border-border">
             <h3 className="text-sm font-semibold text-text-primary mb-3">Demo Credentials:</h3>
             <div className="space-y-2 text-xs">
               <div className="grid grid-cols-1 gap-1">
                 <div className="font-medium text-primary">System Admin:</div>
-                <div className="text-muted-foreground">admin@smartmove.com / Admin123! / MFA: 123456</div>
+                <div className="text-muted-foreground">admin@smartmove.com / Admin123! / MFA will be generated</div>
               </div>
               <div className="grid grid-cols-1 gap-1">
                 <div className="font-medium text-accent">Employee:</div>
-                <div className="text-muted-foreground">employee@company.com / Employee123! / MFA: 654321</div>
-              </div>
-              <div className="grid grid-cols-1 gap-1">
-                <div className="font-medium text-success">IT Response:</div>
-                <div className="text-muted-foreground">itresponse@company.com / ITResponse123! / MFA: 789012</div>
+                <div className="text-muted-foreground">employee@company.com / Employee123! / MFA will be generated</div>
               </div>
             </div>
           </div>
@@ -170,6 +156,4 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}
