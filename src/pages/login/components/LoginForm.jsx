@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Input from '../../../components/ui/Input';
-import Button from '../../../components/ui/Button';
+import Input from '../../../components/ui/Input'; // <- fixed import
+import Button from '../../../components/ui/Button'; // <- fixed import
 import { Checkbox } from '../../../components/ui/Checkbox';
 import Icon from '../../../components/AppIcon';
 
@@ -14,45 +14,25 @@ const LoginForm = ({ onSubmit, loading, error }) => {
   const [validationErrors, setValidationErrors] = useState({});
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    
-    // Clear validation error when user starts typing
+    setFormData(prev => ({ ...prev, [field]: value }));
     if (validationErrors?.[field]) {
-      setValidationErrors(prev => ({
-        ...prev,
-        [field]: ''
-      }));
+      setValidationErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
 
   const validateForm = () => {
     const errors = {};
-    
-    if (!formData?.email) {
-      errors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/?.test(formData?.email)) {
-      errors.email = 'Please enter a valid email address';
-    }
-    
-    if (!formData?.password) {
-      errors.password = 'Password is required';
-    } else if (formData?.password?.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
-    }
-    
+    if (!formData?.email) errors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.email)) errors.email = 'Please enter a valid email address';
+    if (!formData?.password) errors.password = 'Password is required';
+    else if (formData?.password?.length < 6) errors.password = 'Password must be at least 6 characters';
     setValidationErrors(errors);
-    return Object.keys(errors)?.length === 0;
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    
-    if (validateForm()) {
-      onSubmit(formData);
-    }
+    if (validateForm()) onSubmit(formData);
   };
 
   return (
@@ -90,6 +70,7 @@ const LoginForm = ({ onSubmit, loading, error }) => {
           </button>
         </div>
       </div>
+
       <div className="flex items-center justify-between">
         <Checkbox
           label="Remember me"
@@ -97,15 +78,11 @@ const LoginForm = ({ onSubmit, loading, error }) => {
           onChange={(e) => handleInputChange('rememberMe', e?.target?.checked)}
           disabled={loading}
         />
-
-        <button
-          type="button"
-          className="text-sm text-accent hover:text-primary transition-hover font-medium"
-          disabled={loading}
-        >
+        <button type="button" className="text-sm text-accent hover:text-primary transition-hover font-medium" disabled={loading}>
           Forgot password?
         </button>
       </div>
+
       {error && (
         <div className="p-3 bg-error/10 border border-error rounded-md">
           <div className="flex items-center space-x-2">
@@ -114,6 +91,7 @@ const LoginForm = ({ onSubmit, loading, error }) => {
           </div>
         </div>
       )}
+
       <Button
         type="submit"
         variant="default"

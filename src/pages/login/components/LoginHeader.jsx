@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
+import Icon from '../../../components/AppIcon'; // fixed import
 
 const LoginHeader = () => {
   return (
@@ -12,7 +12,7 @@ const LoginHeader = () => {
           SMARTMOVE
         </h1>
       </div>
-      
+
       <div className="space-y-2">
         <h2 className="text-xl font-semibold text-text-primary">
           Welcome Back
@@ -21,7 +21,7 @@ const LoginHeader = () => {
           Sign in to your cybersecurity dashboard
         </p>
       </div>
-      
+
       <div className="flex items-center justify-center space-x-4 text-xs text-muted-foreground">
         <div className="flex items-center space-x-1">
           <Icon name="Users" size={12} />

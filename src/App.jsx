@@ -3,7 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 // Auth pages
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import Signup from "./pages/signup";
 
 // Dashboards
@@ -23,6 +23,10 @@ import Settings from "./pages/Settings";
 import HelpCenter from "./pages/HelpCenter";
 import AdminPanel from "./pages/AdminPanel";
 
+// Your new components
+import ClientChecker from "./pages/ClientChecker";
+import AuditLog from "./pages/AuditLog";
+
 // Generic
 import NotFound from "./pages/NotFound";
 
@@ -35,63 +39,36 @@ const ProtectedRoute = ({ children }) => {
 export default function App() {
   return (
     <Router>
-      <Routes>
-        {/* Public */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+      <div className="app" style={{ minHeight: '100vh', background: 'white' }}>
+        <Routes>
+          {/* Public */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-        {/* Protected */}
-        <Route
-          path="/employee-dashboard"
-          element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>}
-        />
-        <Route
-          path="/system-admin-dashboard"
-          element={<ProtectedRoute><SystemAdminDashboard /></ProtectedRoute>}
-        />
-        <Route
-          path="/email-analyzer"
-          element={<ProtectedRoute><EmailAnalyzer /></ProtectedRoute>}
-        />
-        <Route
-          path="/url-checker"
-          element={<ProtectedRoute><UrlChecker /></ProtectedRoute>}
-        />
-        <Route
-          path="/suspicious-email-reporter"
-          element={<ProtectedRoute><SuspiciousEmailReporter /></ProtectedRoute>}
-        />
-        <Route
-          path="/incident-log-details"
-          element={<ProtectedRoute><IncidentLogDetails /></ProtectedRoute>}
-        />
-        <Route
-          path="/training-modules"
-          element={<ProtectedRoute><TrainingModules /></ProtectedRoute>}
-        />
-        <Route
-          path="/analytics"
-          element={<ProtectedRoute><Analytics /></ProtectedRoute>}
-        />
-        <Route
-          path="/settings"
-          element={<ProtectedRoute><Settings /></ProtectedRoute>}
-        />
-        <Route
-          path="/help-center"
-          element={<ProtectedRoute><HelpCenter /></ProtectedRoute>}
-        />
-        <Route
-          path="/admin"
-          element={<ProtectedRoute><AdminPanel /></ProtectedRoute>}
-        />
+          {/* Protected */}
+          <Route path="/employee-dashboard" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
+          <Route path="/system-admin-dashboard" element={<ProtectedRoute><SystemAdminDashboard /></ProtectedRoute>} />
+          <Route path="/email-analyzer" element={<ProtectedRoute><EmailAnalyzer /></ProtectedRoute>} />
+          <Route path="/url-checker" element={<ProtectedRoute><UrlChecker /></ProtectedRoute>} />
+          <Route path="/suspicious-email-reporter" element={<ProtectedRoute><SuspiciousEmailReporter /></ProtectedRoute>} />
+          <Route path="/incident-log-details" element={<ProtectedRoute><IncidentLogDetails /></ProtectedRoute>} />
+          <Route path="/training-modules" element={<ProtectedRoute><TrainingModules /></ProtectedRoute>} />
+          <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/help-center" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+          
+          {/* NEW: Your added features */}
+          <Route path="/client-checker" element={<ProtectedRoute><ClientChecker /></ProtectedRoute>} />
+          <Route path="/audit-log" element={<ProtectedRoute><AuditLog /></ProtectedRoute>} />
 
-        {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+          {/* Root redirect */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* 404 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

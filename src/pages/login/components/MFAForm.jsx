@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Input from '../../../components/ui/Input';
-import Button from '../../../components/ui/Button';
+import Input from '../../../components/ui/Input'; // fixed import
+import Button from '../../../components/ui/Button'; // fixed import
 import Icon from '../../../components/AppIcon';
 
 const MFAForm = ({ onSubmit, onResendCode, loading, error, email }) => {

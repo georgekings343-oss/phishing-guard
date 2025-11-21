@@ -7,8 +7,10 @@ const UrlChecker = () => {
 
   const checkUrl = async () => {
     if (!url.trim()) return;
-    
+
     setIsLoading(true);
+    setAnalysisResult(null);
+
     // Simulate API call
     setTimeout(() => {
       const mockResult = {
@@ -34,11 +36,12 @@ const UrlChecker = () => {
         <div className="bg-white shadow rounded-lg">
           <div className="px-6 py-4 border-b border-gray-200">
             <h1 className="text-2xl font-bold text-gray-900">URL Safety Checker</h1>
-            <p className="text-gray-600 mt-1">Check any URL for potential phishing, malware, or security threats</p>
+            <p className="text-gray-600 mt-1">
+              Check any URL for potential phishing, malware, or security threats
+            </p>
           </div>
 
           <div className="p-6">
-            {/* URL Input */}
             <div className="mb-6">
               <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
                 Enter URL to Check
@@ -62,34 +65,31 @@ const UrlChecker = () => {
               </div>
             </div>
 
-            {/* Results */}
             {analysisResult && (
               <div className="border-t pt-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Security Analysis</h2>
-                
+
                 {/* Overall Risk */}
                 <div className={`p-4 rounded-md mb-6 ${
                   analysisResult.isMalicious ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'
                 }`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                        analysisResult.isMalicious ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
+                  <div className="flex items-center">
+                    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                      analysisResult.isMalicious ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
+                    }`}>
+                      {analysisResult.isMalicious ? '⚠️' : '✅'}
+                    </div>
+                    <div className="ml-3">
+                      <h3 className={`text-lg font-medium ${
+                        analysisResult.isMalicious ? 'text-red-800' : 'text-green-800'
                       }`}>
-                        {analysisResult.isMalicious ? '⚠️' : '✅'}
-                      </div>
-                      <div className="ml-3">
-                        <h3 className={`text-lg font-medium ${
-                          analysisResult.isMalicious ? 'text-red-800' : 'text-green-800'
-                        }`}>
-                          {analysisResult.isMalicious ? 'Malicious URL Detected' : 'URL Appears Safe'}
-                        </h3>
-                        <p className={`text-sm ${
-                          analysisResult.isMalicious ? 'text-red-600' : 'text-green-600'
-                        }`}>
-                          Risk Score: {analysisResult.riskScore}%
-                        </p>
-                      </div>
+                        {analysisResult.isMalicious ? 'Malicious URL Detected' : 'URL Appears Safe'}
+                      </h3>
+                      <p className={`text-sm ${
+                        analysisResult.isMalicious ? 'text-red-600' : 'text-green-600'
+                      }`}>
+                        Risk Score: {analysisResult.riskScore}%
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -111,9 +111,7 @@ const UrlChecker = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Reputation:</span>
-                        <span className={`font-medium ${
-                          analysisResult.reputation === 'Good' ? 'text-green-600' : 'text-red-600'
-                        }`}>
+                        <span className={`font-medium ${analysisResult.reputation === 'Good' ? 'text-green-600' : 'text-red-600'}`}>
                           {analysisResult.reputation}
                         </span>
                       </div>
@@ -144,9 +142,7 @@ const UrlChecker = () => {
                     <li>• Avoid entering personal information on this website</li>
                     <li>• Verify the website through official sources</li>
                     <li>• Use antivirus software with web protection</li>
-                    {analysisResult.isMalicious && (
-                      <li className="font-medium">• This URL has been flagged as potentially malicious</li>
-                    )}
+                    {analysisResult.isMalicious && <li className="font-medium">• This URL has been flagged as potentially malicious</li>}
                   </ul>
                 </div>
               </div>
