@@ -4,7 +4,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 /* ---------------------- PUBLIC PAGES ---------------------- */
-import Login from "./pages/login/index.jsx";
+import Login from "./pages/login/AnimatedLogin.jsx";
 import Signup from "./pages/signup/index.jsx";
 import ForgotPassword from "./pages/forgot-password/index.jsx";
 
