@@ -4,7 +4,7 @@ export const users = [
     role: "admin",
     email: "admin@company.com",
     password: "AdminPass123",
-    firstName: "Alice",
+    firstName: "George",
     lastName: "Admin",
     phone: "0712345678",
   },

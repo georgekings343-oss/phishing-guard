@@ -1,40 +1,40 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon'; // fixed import
 
 const LoginHeader = () => {
-  return (
-    <div className="text-center space-y-4 mb-8">
-      <div className="flex items-center justify-center space-x-3">
-        <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-xl glow-border">
-          <Icon name="Shield" size={28} color="white" />
+    return (
+        <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-green-400 mb-3 glitch-text">
+                SmartMove
+            </h1>
+            <p className="text-green-300 text-sm leading-relaxed">
+                A digital defense project designed to detect, prevent, and respond to phishing attacks
+            </p>
+            <style jsx>{`
+                .glitch-text {
+                    text-shadow: 0 0 10px #00ff00;
+                    animation: glitch 5s infinite;
+                }
+                @keyframes glitch {
+                    0%, 100% { 
+                        transform: translate(0);
+                        text-shadow: 0 0 10px #00ff00;
+                    }
+                    25% { 
+                        transform: translate(-1px, 1px);
+                        text-shadow: 2px 0 10px #00ff00, -2px 0 10px #00cc00;
+                    }
+                    50% { 
+                        transform: translate(1px, -1px);
+                        text-shadow: -2px 0 10px #00ff00, 2px 0 10px #00cc00;
+                    }
+                    75% { 
+                        transform: translate(-1px, -1px);
+                        text-shadow: 2px 0 10px #00cc00, -2px 0 10px #00ff00;
+                    }
+                }
+            `}</style>
         </div>
-        <h1 className="text-2xl font-bold text-text-primary">
-          SMARTMOVE
-        </h1>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-xl font-semibold text-text-primary">
-          Welcome Back
-        </h2>
-        <p className="text-muted-foreground">
-          Sign in to your cybersecurity dashboard
-        </p>
-      </div>
-
-      <div className="flex items-center justify-center space-x-4 text-xs text-muted-foreground">
-        <div className="flex items-center space-x-1">
-          <Icon name="Users" size={12} />
-          <span>Multi-Role Access</span>
-        </div>
-        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-        <div className="flex items-center space-x-1">
-          <Icon name="Shield" size={12} />
-          <span>Secure Authentication</span>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default LoginHeader;
