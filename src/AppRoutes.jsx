@@ -7,6 +7,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/login/AnimatedLogin.jsx";
 import Signup from "./pages/signup/index.jsx";
 import ForgotPassword from "./pages/forgot-password/index.jsx";
+import MFA from "./pages/mfa/index.jsx";
 
 /* ---------------------- DASHBOARDS ------------------------ */
 import EmployeeDashboard from "./pages/employee-dashboard/index.jsx";
@@ -53,8 +54,8 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/public-checker" element={<PublicChecker />} />
-
+      <Route path="/mfa" element={<MFA />} />
+  
       {/* ======= EMPLOYEE ======= */}
       <Route
         path="/employee-dashboard"

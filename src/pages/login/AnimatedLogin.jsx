@@ -8,17 +8,25 @@ const AnimatedLogin = () => {
     const navigate = useNavigate();
 
     // Handle login submission
-    const handleLogin = (formData) => {
-        const { email, password } = formData;
+const handleLogin = (formData) => {
+    const { email, password } = formData;
 
-        // ⛔ Fake authentication for now (until backend added)
-        if (!email || !password) return;
+    if (!email || !password) return;
 
-        // If login succeeds
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("userRole", "employee"); // TEMP — replace with backend
+    // -------------- ROLE ASSIGNMENT (temporary until backend) --------------
+    let role = "employee";
 
-        navigate("/employee-dashboard");
+    if (email.toLowerCase() === "admin@smartmove.com") role = "admin";
+    else if (email.toLowerCase() === "client@smartmove.com") role = "client";
+    else role = "employee";
+
+    // Store auth but DO NOT redirect to dashboard yet
+    localStorage.setItem("isAuthenticated", "false");
+    localStorage.setItem("pendingEmail", email);
+    localStorage.setItem("pendingRole", role);
+
+    // Redirect to MFA
+    navigate("/mfa");
     };
 
     return (
