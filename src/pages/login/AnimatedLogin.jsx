@@ -3,30 +3,34 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import SecurityBadges from './components/SecurityBadges';
 import './AnimatedLogin.css';
+import { users } from '../../utils/users';
 
 const AnimatedLogin = () => {
     const navigate = useNavigate();
 
     // Handle login submission
-const handleLogin = (formData) => {
-    const { email, password } = formData;
+    const handleLogin = (formData) => {   
+        const { email, password } = formData;
 
-    if (!email || !password) return;
+        // Find user in users.js
+        const foundUser = users.find(
+            (u) =>
+                u.email.toLowerCase() === email.toLowerCase() &&
+                u.password === password
+        );
 
-    // -------------- ROLE ASSIGNMENT (temporary until backend) --------------
-    let role = "employee";
+        if (!foundUser) {
+            alert("Invalid credentials");
+            return;
+        }
 
-    if (email.toLowerCase() === "admin@smartmove.com") role = "admin";
-    else if (email.toLowerCase() === "client@smartmove.com") role = "client";
-    else role = "employee";
+        // Store pending auth for MFA
+        localStorage.setItem("isAuthenticated", "false");
+        localStorage.setItem("pendingEmail", foundUser.email);
+        localStorage.setItem("pendingRole", foundUser.role);
 
-    // Store auth but DO NOT redirect to dashboard yet
-    localStorage.setItem("isAuthenticated", "false");
-    localStorage.setItem("pendingEmail", email);
-    localStorage.setItem("pendingRole", role);
-
-    // Redirect to MFA
-    navigate("/mfa");
+        // Redirect to MFA page
+        navigate("/mfa");
     };
 
     return (

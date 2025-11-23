@@ -12,6 +12,7 @@ import MFA from "./pages/mfa/index.jsx";
 /* ---------------------- DASHBOARDS ------------------------ */
 import EmployeeDashboard from "./pages/employee-dashboard/index.jsx";
 import SystemAdminDashboard from "./pages/system-admin-dashboard/index.jsx";
+import TenantDashboard from "./pages/tenant-dashboard/index.jsx"; // Added import
 
 /* ---------------------- TOOLS ----------------------------- */
 import EmailAnalyzer from "./pages/email-analyzer/index.jsx";
@@ -55,7 +56,7 @@ export default function AppRoutes() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/mfa" element={<MFA />} />
-  
+
       {/* ======= EMPLOYEE ======= */}
       <Route
         path="/employee-dashboard"
@@ -65,7 +66,14 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
+      <Route
+        path="/tenant-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["tenant"]}>
+            <TenantDashboard />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/training-modules"
         element={
@@ -84,7 +92,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/admin-panel"
         element={
@@ -93,7 +100,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/user-management"
         element={
@@ -102,7 +108,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/analytics"
         element={
@@ -111,7 +116,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/threat-intelligence"
         element={
@@ -120,7 +124,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/audit-log"
         element={
@@ -139,7 +142,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/url-checker"
         element={
@@ -148,7 +150,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/suspicious-email-reporter"
         element={
@@ -157,7 +158,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/incident-log-details"
         element={
@@ -166,7 +166,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/settings"
         element={
@@ -175,7 +174,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/client-checker"
         element={
@@ -184,7 +182,6 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/help-center"
         element={
