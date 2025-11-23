@@ -15,8 +15,6 @@
     background-attachment: fixed;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     padding: 20px;
-    position: relative;
-    overflow: hidden;
 }
 
 .login-card {
@@ -28,8 +26,6 @@
     box-shadow: 
         0 25px 50px rgba(0, 0, 0, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.4);
-    position: relative;
-    z-index: 1;
     border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
@@ -58,7 +54,7 @@
     font-weight: 500;
 }
 
-/* Security Features - Fixed opacity */
+/* Security Features */
 .security-features {
     display: flex;
     justify-content: center;
@@ -70,19 +66,17 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #2d3748 !important;
+    color: #2d3748;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 10px 16px;
-    background: rgba(66, 153, 225, 0.2) !important;
+    background: rgba(66, 153, 225, 0.15);
     border-radius: 8px;
-    border: 1px solid rgba(66, 153, 225, 0.4) !important;
-    opacity: 1 !important;
+    border: 1px solid rgba(66, 153, 225, 0.3);
 }
 
 .feature-icon {
-    color: #4299e1 !important;
-    opacity: 1 !important;
+    color: #4299e1;
     font-size: 1.1rem;
 }
 
@@ -114,7 +108,6 @@
     cursor: pointer;
     padding: 0;
     font-size: 0.9rem;
-    transition: all 0.3s ease;
 }
 
 .signup-link:hover {
@@ -187,20 +180,17 @@
     margin-bottom: 2px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    opacity: 1;
 }
 
 .badge-subtitle {
     font-size: 0.65rem;
     font-weight: 600;
     margin-bottom: 2px;
-    opacity: 1;
 }
 
 .badge-description {
     font-size: 0.6rem;
     font-weight: 500;
-    opacity: 1;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
@@ -256,7 +246,6 @@
     font-weight: 600;
     font-size: 14px;
     margin-bottom: 8px;
-    letter-spacing: -0.2px;
 }
 
 .input-group input {
@@ -322,25 +311,23 @@
     cursor: not-allowed;
 }
 
-/* Form Options - Remember me & Forgot password - Fixed opacity */
+/* Form Options - Simple and clean */
 .form-options {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 1rem 0;
-    opacity: 1 !important;
 }
 
 .checkbox-container {
     display: flex;
     align-items: center;
     gap: 8px;
-    opacity: 1 !important;
 }
 
 .checkbox-container input[type="checkbox"] {
-    background: #ffffff !important;
-    border: 2px solid #e2e8f0 !important;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
     border-radius: 4px;
     width: 16px;
     height: 16px;
@@ -348,38 +335,35 @@
 }
 
 .checkbox-container input[type="checkbox"]:checked {
-    background: #4299e1 !important;
-    border-color: #4299e1 !important;
-    box-shadow: 0 2px 4px rgba(66, 153, 225, 0.2) !important;
+    background: #4299e1;
+    border-color: #4299e1;
 }
 
 .checkbox-container label {
-    color: #2d3748 !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
+    color: #2d3748;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    margin: 0 !important;
-    opacity: 1 !important;
+    margin: 0;
 }
 
 .forgot-password {
-    color: #4299e1 !important;
-    font-family: 'Inter', sans-serif !important;
-    transition: all 0.3s ease !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    background: none !important;
-    border: none !important;
-    cursor: pointer !important;
-    padding: 0 !important;
-    opacity: 1 !important;
+    color: #4299e1;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }
 
 .forgot-password:hover {
-    color: #3182ce !important;
-    text-decoration: underline !important;
+    color: #3182ce;
+    text-decoration: underline;
 }
 
 /* Error Message */
@@ -423,12 +407,6 @@
 .password-toggle:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-/* Ensure all text is clearly visible and properly spaced */
-.login-card * {
-    color: inherit;
-    opacity: 1;
 }
 
 /* Responsive Design */
@@ -529,32 +507,4 @@
 
 .right-3 {
     right: 0.75rem;
-}
-
-/* EMERGENCY FIX - Force all text to be opaque */
-.login-card,
-.login-card * {
-    opacity: 1 !important;
-}
-
-/* Specific element emergency fixes */
-.feature-item,
-.feature-item *,
-.form-options,
-.form-options *,
-.checkbox-container,
-.checkbox-container *,
-.forgot-password {
-    opacity: 1 !important;
-}
-
-.feature-item span,
-.checkbox-container label {
-    color: #2d3748 !important;
-    opacity: 1 !important;
-}
-
-.forgot-password {
-    color: #4299e1 !important;
-    opacity: 1 !important;
 }

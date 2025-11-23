@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button';
-import Checkbox from '../../../components/ui/Checkbox';
+import { Checkbox } from '../../../components/ui/Checkbox';  // FIXED IMPORT
 import Icon from '../../../components/AppIcon';
 
 const LoginForm = ({ onSubmit, loading, error }) => {
@@ -86,20 +86,15 @@ const LoginForm = ({ onSubmit, loading, error }) => {
 
       {/* Remember / Forgot */}
       <div className="flex items-center justify-between pt-2">
-        <div className="flex items-center">
-          <Checkbox
-            label="Remember me"
-            checked={formData.rememberMe}
-            onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
-            disabled={loading}
-            className="hacker-checkbox"
-          />
-        </div>
+        <Checkbox
+          label="Remember me"
+          checked={formData.rememberMe}
+          onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
+          disabled={loading}
+          className="hacker-checkbox"
+        />
 
-        <button
-          type="button"
-          className="forgot-password text-sm"
-        >
+        <button type="button" className="forgot-password text-sm">
           Forgot password?
         </button>
       </div>
@@ -111,7 +106,7 @@ const LoginForm = ({ onSubmit, loading, error }) => {
         </div>
       )}
 
-      {/* Submit Button */}
+      {/* Submit */}
       <div className="pt-4">
         <Button
           type="submit"
@@ -125,6 +120,7 @@ const LoginForm = ({ onSubmit, loading, error }) => {
           Sign In
         </Button>
       </div>
+
     </form>
   );
 };
