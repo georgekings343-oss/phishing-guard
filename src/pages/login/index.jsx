@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
-import { users } from "../../utils/users"; // ensure this file exists
+// import { users } from "../../utils/users"; // replaced with API call
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,33 +13,45 @@ export default function LoginPage() {
   const handleSubmit = async (formData) => {
     setError("");
     setLoading(true);
-
-    const foundUser = users.find(
-      (u) =>
-        u.email.toLowerCase() === formData.email.toLowerCase() &&
-        u.password === formData.password
-    );
-
-    setTimeout(() => {
-      if (!foundUser) {
-        setError("Invalid email or password.");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email, password: formData.password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.message || "Login failed");
         setLoading(false);
         return;
       }
 
-      // Save session
+      if (data.mfaRequired) {
+        // Store MFA state in localStorage or context as needed
+        localStorage.setItem("pendingMfaId", data.mfaId);
+        localStorage.setItem("pendingEmail", formData.email);
+        // Redirect to MFA verification page (implement this route/UI)
+        navigate("/login/mfa");
+        setLoading(false);
+        return;
+      }
+
+      // Success: store token and user info
+      localStorage.setItem("token", data.token);
       localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("userRole", foundUser.role);
+      localStorage.setItem("userRole", data.user?.role || "client");
 
       // Redirect based on role
-      if (foundUser.role === "admin") {
+      if (data.user?.role === "admin") {
         navigate("/system-admin-dashboard");
-      } else if (foundUser.role === "employee") {
-        navigate("/employee-dashboard");
       } else {
         navigate("/employee-dashboard");
       }
-    }, 900);
+    } catch (err) {
+      setError("Login failed. " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
 
 // Mock users
@@ -23,4 +23,4 @@ router.post("/:id/promote", (req, res) => {
   res.json({ message: `${user.name} promoted to admin`, user });
 });
 
-export default router;
+module.exports = router;

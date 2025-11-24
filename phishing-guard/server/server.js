@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const supabaseHelper = require("./supabaseClient");
 
 const app = express();
 app.use(express.json());
@@ -19,12 +20,24 @@ app.use(
 );
 console.log(`✅ CORS enabled for: ${FRONTEND_URL}`);
 
-// ===== MongoDB =====
-if (process.env.MONGO_URI) {
+// ===== Database selection =====
+// If Supabase is configured (SUPABASE_URL + SUPABASE_KEY) we'll initialize
+// a Supabase client and skip mongoose connection. Otherwise, fall back to
+// MongoDB if MONGO_URI is provided.
+const useSupabase = !!(process.env.SUPABASE_URL && process.env.SUPABASE_KEY);
+
+if (useSupabase) {
+  supabaseHelper
+    .getClient()
+    .then(() => console.log("✅ Supabase client initialized"))
+    .catch((err) => console.warn("⚠️ Supabase init failed:", err.message));
+} else if (process.env.MONGO_URI) {
   mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("✅ MongoDB Connected"))
     .catch((err) => console.warn("⚠️ MongoDB FAILED:", err.message));
+} else {
+  console.log('⚠️ No database configured. Set SUPABASE_URL+SUPABASE_KEY or MONGO_URI');
 }
 
 // ===== Route imports =====
@@ -54,6 +67,18 @@ app.use("/api/users", usersRoutes);
 // ===== Test Route =====
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Server running" });
+});
+
+// ===== Root landing =====
+// When visiting the API root, return a small JSON landing page so the
+// backend port is friendly to open in a browser even when the frontend
+// may not be running.
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "API server running. Open the frontend at " + FRONTEND_URL,
+    endpoints: ["/api/health", "/api/auth", "/api/check"]
+  });
 });
 
 // ===== Server =====

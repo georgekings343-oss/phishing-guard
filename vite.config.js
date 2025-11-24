@@ -14,8 +14,12 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     cors: true,
-    // THIS IS THE KEY TO FIX 404 ON REFRESH
+    // Ensures all unknown routes serve index.html (SPA fix)
     historyApiFallback: true,
+    fs: {
+      allow: [".."],
+    },
+    middlewareMode: false,
   },
   preview: {
     port: 5173,

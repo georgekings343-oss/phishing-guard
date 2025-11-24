@@ -1,6 +1,7 @@
 // phishing-guard/server/middleware/auth.js
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const supabaseModels = require("../supabaseModels");
 
 const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret";
 
@@ -11,7 +12,14 @@ async function verifyToken(req, res, next) {
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(payload.id).select("-passwordHash").lean();
+    let user = null;
+    // prefer Supabase if configured
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_KEY) {
+      user = await supabaseModels.getUserById(payload.id);
+      if (user) delete user.passwordHash;
+    } else {
+      user = await User.findById(payload.id).select("-passwordHash").lean();
+    }
     if (!user) return res.status(401).json({ message: "User not found" });
     req.user = user;
     next();

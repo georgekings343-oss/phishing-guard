@@ -20,22 +20,51 @@ const SignupPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      // Save new user to localStorage for testing
-      let storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
-      storedUsers.push(formData);
-      localStorage.setItem("users", JSON.stringify(storedUsers));
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.firstName + ' ' + formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+          role: formData.role
+        })
+      });
+      // Parse JSON safely (server may return empty/non-JSON on error)
+      let data = null;
+      try {
+        // Attempt to parse JSON
+        data = await res.json();
+      } catch (parseErr) {
+        // If parsing fails, try to read text and show it as message
+        const text = await res.text().catch(() => null);
+        const msg = text || (res.status ? `HTTP ${res.status}` : 'Empty response');
+        alert(msg);
+        setLoading(false);
+        return;
+      }
+
+      if (!res.ok) {
+        alert((data && data.message) || "Signup failed");
+        setLoading(false);
+        return;
+      }
       alert("Signup successful! You can now log in.");
       navigate("/login");
+    } catch (err) {
+      alert("Signup failed. " + err.message);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (

@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
 
 // Mock training modules
@@ -13,4 +13,4 @@ router.get("/", (req, res) => {
   res.json(trainingModules);
 });
 
-export default router;
+module.exports = router;
