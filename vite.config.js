@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"), // <-- this enables @ = src
+      "@": path.resolve(__dirname, "src"), // Enables @ = src
     },
   },
   server: {
@@ -14,6 +14,8 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     cors: true,
+    // THIS IS THE KEY TO FIX 404 ON REFRESH
+    historyApiFallback: true,
   },
   preview: {
     port: 5173,
